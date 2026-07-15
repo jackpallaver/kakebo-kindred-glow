@@ -20,6 +20,7 @@ import { Route as AuthenticatedForecastRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedCalendarRouteImport } from './routes/_authenticated/calendar'
 import { Route as AuthenticatedOperatorUsersRouteImport } from './routes/_authenticated/operator.users'
+import { Route as AuthenticatedOperatorUsersUserIdRouteImport } from './routes/_authenticated/operator.users.$userId'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -77,6 +78,12 @@ const AuthenticatedOperatorUsersRoute =
     path: '/operator/users',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedOperatorUsersUserIdRoute =
+  AuthenticatedOperatorUsersUserIdRouteImport.update({
+    id: '/$userId',
+    path: '/$userId',
+    getParentRoute: () => AuthenticatedOperatorUsersRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -88,7 +95,8 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AuthenticatedSettingsRoute
   '/tips': typeof AuthenticatedTipsRoute
   '/transactions': typeof AuthenticatedTransactionsRoute
-  '/operator/users': typeof AuthenticatedOperatorUsersRoute
+  '/operator/users': typeof AuthenticatedOperatorUsersRouteWithChildren
+  '/operator/users/$userId': typeof AuthenticatedOperatorUsersUserIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -100,7 +108,8 @@ export interface FileRoutesByTo {
   '/settings': typeof AuthenticatedSettingsRoute
   '/tips': typeof AuthenticatedTipsRoute
   '/transactions': typeof AuthenticatedTransactionsRoute
-  '/operator/users': typeof AuthenticatedOperatorUsersRoute
+  '/operator/users': typeof AuthenticatedOperatorUsersRouteWithChildren
+  '/operator/users/$userId': typeof AuthenticatedOperatorUsersUserIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -114,7 +123,8 @@ export interface FileRoutesById {
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/tips': typeof AuthenticatedTipsRoute
   '/_authenticated/transactions': typeof AuthenticatedTransactionsRoute
-  '/_authenticated/operator/users': typeof AuthenticatedOperatorUsersRoute
+  '/_authenticated/operator/users': typeof AuthenticatedOperatorUsersRouteWithChildren
+  '/_authenticated/operator/users/$userId': typeof AuthenticatedOperatorUsersUserIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -129,6 +139,7 @@ export interface FileRouteTypes {
     | '/tips'
     | '/transactions'
     | '/operator/users'
+    | '/operator/users/$userId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -141,6 +152,7 @@ export interface FileRouteTypes {
     | '/tips'
     | '/transactions'
     | '/operator/users'
+    | '/operator/users/$userId'
   id:
     | '__root__'
     | '/'
@@ -154,6 +166,7 @@ export interface FileRouteTypes {
     | '/_authenticated/tips'
     | '/_authenticated/transactions'
     | '/_authenticated/operator/users'
+    | '/_authenticated/operator/users/$userId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -241,8 +254,30 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedOperatorUsersRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/operator/users/$userId': {
+      id: '/_authenticated/operator/users/$userId'
+      path: '/$userId'
+      fullPath: '/operator/users/$userId'
+      preLoaderRoute: typeof AuthenticatedOperatorUsersUserIdRouteImport
+      parentRoute: typeof AuthenticatedOperatorUsersRoute
+    }
   }
 }
+
+interface AuthenticatedOperatorUsersRouteChildren {
+  AuthenticatedOperatorUsersUserIdRoute: typeof AuthenticatedOperatorUsersUserIdRoute
+}
+
+const AuthenticatedOperatorUsersRouteChildren: AuthenticatedOperatorUsersRouteChildren =
+  {
+    AuthenticatedOperatorUsersUserIdRoute:
+      AuthenticatedOperatorUsersUserIdRoute,
+  }
+
+const AuthenticatedOperatorUsersRouteWithChildren =
+  AuthenticatedOperatorUsersRoute._addFileChildren(
+    AuthenticatedOperatorUsersRouteChildren,
+  )
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedCalendarRoute: typeof AuthenticatedCalendarRoute
@@ -252,7 +287,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedTipsRoute: typeof AuthenticatedTipsRoute
   AuthenticatedTransactionsRoute: typeof AuthenticatedTransactionsRoute
-  AuthenticatedOperatorUsersRoute: typeof AuthenticatedOperatorUsersRoute
+  AuthenticatedOperatorUsersRoute: typeof AuthenticatedOperatorUsersRouteWithChildren
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -263,7 +298,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedTipsRoute: AuthenticatedTipsRoute,
   AuthenticatedTransactionsRoute: AuthenticatedTransactionsRoute,
-  AuthenticatedOperatorUsersRoute: AuthenticatedOperatorUsersRoute,
+  AuthenticatedOperatorUsersRoute: AuthenticatedOperatorUsersRouteWithChildren,
 }
 
 const AuthenticatedRouteRouteWithChildren =
