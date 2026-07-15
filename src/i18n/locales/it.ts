@@ -131,6 +131,7 @@ const it = {
     abbigliamento: "Abbigliamento",
     risparmio: "Risparmio",
     altro: "Altro",
+    stipendio: "Stipendio",
   },
 };
 

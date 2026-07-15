@@ -133,6 +133,7 @@ const ar: Translation = {
     abbigliamento: "ملابس",
     risparmio: "توفير",
     altro: "أخرى",
+    stipendio: "راتب",
   },
 };
 

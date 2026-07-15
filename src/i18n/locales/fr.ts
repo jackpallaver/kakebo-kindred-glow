@@ -133,6 +133,7 @@ const fr: Translation = {
     abbigliamento: "Vêtements",
     risparmio: "Épargne",
     altro: "Autre",
+    stipendio: "Salaire",
   },
 };
 
