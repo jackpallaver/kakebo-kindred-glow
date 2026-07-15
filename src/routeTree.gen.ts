@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedTransactionsRouteImport } from './routes/_authenticated/transactions'
 import { Route as AuthenticatedTipsRouteImport } from './routes/_authenticated/tips'
+import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
 import { Route as AuthenticatedForecastRouteImport } from './routes/_authenticated/forecast'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
@@ -44,6 +45,11 @@ const AuthenticatedTipsRoute = AuthenticatedTipsRouteImport.update({
   path: '/tips',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedOnboardingRoute = AuthenticatedOnboardingRouteImport.update({
   id: '/onboarding',
   path: '/onboarding',
@@ -72,6 +78,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/forecast': typeof AuthenticatedForecastRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
+  '/settings': typeof AuthenticatedSettingsRoute
   '/tips': typeof AuthenticatedTipsRoute
   '/transactions': typeof AuthenticatedTransactionsRoute
 }
@@ -82,6 +89,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/forecast': typeof AuthenticatedForecastRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
+  '/settings': typeof AuthenticatedSettingsRoute
   '/tips': typeof AuthenticatedTipsRoute
   '/transactions': typeof AuthenticatedTransactionsRoute
 }
@@ -94,6 +102,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/forecast': typeof AuthenticatedForecastRoute
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
+  '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/tips': typeof AuthenticatedTipsRoute
   '/_authenticated/transactions': typeof AuthenticatedTransactionsRoute
 }
@@ -106,6 +115,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/forecast'
     | '/onboarding'
+    | '/settings'
     | '/tips'
     | '/transactions'
   fileRoutesByTo: FileRoutesByTo
@@ -116,6 +126,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/forecast'
     | '/onboarding'
+    | '/settings'
     | '/tips'
     | '/transactions'
   id:
@@ -127,6 +138,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/forecast'
     | '/_authenticated/onboarding'
+    | '/_authenticated/settings'
     | '/_authenticated/tips'
     | '/_authenticated/transactions'
   fileRoutesById: FileRoutesById
@@ -174,6 +186,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTipsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/settings': {
+      id: '/_authenticated/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/onboarding': {
       id: '/_authenticated/onboarding'
       path: '/onboarding'
@@ -210,6 +229,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedForecastRoute: typeof AuthenticatedForecastRoute
   AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
+  AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedTipsRoute: typeof AuthenticatedTipsRoute
   AuthenticatedTransactionsRoute: typeof AuthenticatedTransactionsRoute
 }
@@ -219,6 +239,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedForecastRoute: AuthenticatedForecastRoute,
   AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
+  AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedTipsRoute: AuthenticatedTipsRoute,
   AuthenticatedTransactionsRoute: AuthenticatedTransactionsRoute,
 }
