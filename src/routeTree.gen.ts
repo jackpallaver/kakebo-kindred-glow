@@ -19,6 +19,7 @@ import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authentic
 import { Route as AuthenticatedForecastRouteImport } from './routes/_authenticated/forecast'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedCalendarRouteImport } from './routes/_authenticated/calendar'
+import { Route as AuthenticatedOperatorUsersRouteImport } from './routes/_authenticated/operator.users'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -70,6 +71,12 @@ const AuthenticatedCalendarRoute = AuthenticatedCalendarRouteImport.update({
   path: '/calendar',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedOperatorUsersRoute =
+  AuthenticatedOperatorUsersRouteImport.update({
+    id: '/operator/users',
+    path: '/operator/users',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -81,6 +88,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AuthenticatedSettingsRoute
   '/tips': typeof AuthenticatedTipsRoute
   '/transactions': typeof AuthenticatedTransactionsRoute
+  '/operator/users': typeof AuthenticatedOperatorUsersRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -92,6 +100,7 @@ export interface FileRoutesByTo {
   '/settings': typeof AuthenticatedSettingsRoute
   '/tips': typeof AuthenticatedTipsRoute
   '/transactions': typeof AuthenticatedTransactionsRoute
+  '/operator/users': typeof AuthenticatedOperatorUsersRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -105,6 +114,7 @@ export interface FileRoutesById {
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/tips': typeof AuthenticatedTipsRoute
   '/_authenticated/transactions': typeof AuthenticatedTransactionsRoute
+  '/_authenticated/operator/users': typeof AuthenticatedOperatorUsersRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -118,6 +128,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/tips'
     | '/transactions'
+    | '/operator/users'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -129,6 +140,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/tips'
     | '/transactions'
+    | '/operator/users'
   id:
     | '__root__'
     | '/'
@@ -141,6 +153,7 @@ export interface FileRouteTypes {
     | '/_authenticated/settings'
     | '/_authenticated/tips'
     | '/_authenticated/transactions'
+    | '/_authenticated/operator/users'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -221,6 +234,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCalendarRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/operator/users': {
+      id: '/_authenticated/operator/users'
+      path: '/operator/users'
+      fullPath: '/operator/users'
+      preLoaderRoute: typeof AuthenticatedOperatorUsersRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -232,6 +252,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedTipsRoute: typeof AuthenticatedTipsRoute
   AuthenticatedTransactionsRoute: typeof AuthenticatedTransactionsRoute
+  AuthenticatedOperatorUsersRoute: typeof AuthenticatedOperatorUsersRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -242,6 +263,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedTipsRoute: AuthenticatedTipsRoute,
   AuthenticatedTransactionsRoute: AuthenticatedTransactionsRoute,
+  AuthenticatedOperatorUsersRoute: AuthenticatedOperatorUsersRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
