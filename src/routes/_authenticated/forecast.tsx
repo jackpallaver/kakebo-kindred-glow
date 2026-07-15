@@ -38,6 +38,20 @@ function ForecastPage() {
     },
   });
 
+  const { data: history } = useQuery({
+    queryKey: ["forecast-history", user.id],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("monthly_forecasts")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("year", { ascending: false })
+        .order("month", { ascending: false })
+        .limit(24);
+      return data ?? [];
+    },
+  });
+
   const { data: actual } = useQuery({
     queryKey: ["stats", user.id, year, month],
     queryFn: () => fetchMonthlyStats(user.id, year, month),
@@ -73,6 +87,25 @@ function ForecastPage() {
     if (error) return toast.error(error.message);
     toast.success("✓");
     qc.invalidateQueries({ queryKey: ["forecast"] });
+    qc.invalidateQueries({ queryKey: ["forecast-history"] });
+  }
+
+  const currentForecast = (history ?? []).find((h) => h.year === year && h.month === month);
+  const previousForecasts = (history ?? []).filter((h) => !(h.year === year && h.month === month));
+
+  function sumExpenses(exp: unknown) {
+    if (!exp || typeof exp !== "object") return 0;
+    return Object.values(exp as Record<string, number>).reduce(
+      (a, b) => a + (Number(b) || 0),
+      0,
+    );
+  }
+
+  function monthLabel(y: number, m: number) {
+    return new Date(y, m - 1, 1).toLocaleDateString(undefined, {
+      month: "long",
+      year: "numeric",
+    });
   }
 
   return (
@@ -124,6 +157,52 @@ function ForecastPage() {
       <Button onClick={save} className="w-full sm:w-auto" style={{ background: "var(--gradient-brand)" }}>
         {t("common.save")}
       </Button>
+
+      <Card className="p-6 space-y-4">
+        <h3 className="font-semibold">{t("forecast.history")}</h3>
+
+        <div className="space-y-2">
+          <p className="text-xs uppercase tracking-wide text-muted-foreground">
+            {t("forecast.currentMonth")}
+          </p>
+          {currentForecast ? (
+            <div className="p-3 rounded-md border bg-muted/40">
+              <div className="flex items-center justify-between">
+                <div className="font-medium capitalize">{monthLabel(year, month)}</div>
+                <div className="text-sm text-muted-foreground">
+                  {t("forecast.expectedIncome")}: € {Number(currentForecast.expected_income ?? 0).toFixed(2)}
+                </div>
+              </div>
+              <div className="text-xs text-muted-foreground mt-1">
+                {t("forecast.totalExpenses")}: € {sumExpenses(currentForecast.expected_expenses).toFixed(2)}
+              </div>
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground">{t("forecast.empty")}</p>
+          )}
+        </div>
+
+        <div className="space-y-2">
+          <p className="text-xs uppercase tracking-wide text-muted-foreground">
+            {t("forecast.previous")}
+          </p>
+          {previousForecasts.length === 0 ? (
+            <p className="text-sm text-muted-foreground">{t("forecast.empty")}</p>
+          ) : (
+            <div className="space-y-2">
+              {previousForecasts.map((f) => (
+                <div key={f.id} className="p-3 rounded-md bg-muted/30 flex items-center justify-between">
+                  <div className="font-medium capitalize text-sm">{monthLabel(f.year, f.month)}</div>
+                  <div className="text-xs text-muted-foreground text-right">
+                    <div>€ {Number(f.expected_income ?? 0).toFixed(2)} · {t("forecast.expectedIncome").toLowerCase()}</div>
+                    <div>€ {sumExpenses(f.expected_expenses).toFixed(2)} · {t("forecast.totalExpenses").toLowerCase()}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </Card>
     </div>
   );
 }

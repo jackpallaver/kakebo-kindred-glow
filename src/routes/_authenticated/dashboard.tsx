@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
-import { TrendingUp, TrendingDown, PiggyBank, Target } from "lucide-react";
+import { TrendingUp, TrendingDown, PiggyBank, Target, LineChart as LineChartIcon, CalendarClock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { fetchMonthlyStats, fetchYearlySavings } from "@/lib/kakebo";
 import { CATEGORY_COLORS, type Category } from "@/lib/categories";
@@ -15,7 +15,7 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 });
 
 function Dashboard() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { user } = Route.useRouteContext();
   const now = new Date();
   const year = now.getFullYear();
@@ -52,6 +52,35 @@ function Dashboard() {
     queryFn: () => fetchYearlySavings(user.id, year),
   });
 
+  const { data: forecastCurrent } = useQuery({
+    queryKey: ["forecast", user.id, year, month],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("monthly_forecasts")
+        .select("*")
+        .eq("user_id", user.id)
+        .eq("year", year)
+        .eq("month", month)
+        .maybeSingle();
+      return data;
+    },
+  });
+
+  const { data: upcomingEvents } = useQuery({
+    queryKey: ["events-upcoming", user.id],
+    queryFn: async () => {
+      const today = new Date().toISOString().slice(0, 10);
+      const { data } = await supabase
+        .from("calendar_events")
+        .select("*")
+        .eq("user_id", user.id)
+        .gte("date", today)
+        .order("date", { ascending: true })
+        .limit(5);
+      return data ?? [];
+    },
+  });
+
   const yearSavings = (yearly ?? []).reduce((a, b) => a + Math.max(b.savings, 0), 0);
   const goalProgress = goal ? Math.min(100, (yearSavings / Number(goal.target_amount)) * 100) : 0;
 
@@ -68,6 +97,14 @@ function Dashboard() {
 
   const challenge = 50;
   const challengeProgress = Math.min(100, ((stats?.savings ?? 0) / challenge) * 100);
+
+  const forecastIncome = Number(forecastCurrent?.expected_income ?? 0);
+  const forecastExpenses = forecastCurrent?.expected_expenses
+    ? Object.values(forecastCurrent.expected_expenses as Record<string, number>).reduce(
+        (a, b) => a + (Number(b) || 0),
+        0,
+      )
+    : 0;
 
   return (
     <div className="p-4 md:p-6 space-y-6 max-w-7xl mx-auto">
@@ -182,6 +219,68 @@ function Dashboard() {
               </BarChart>
             </ResponsiveContainer>
           </div>
+        </Card>
+      </div>
+
+      {/* Forecast + Calendar summaries */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <Card className="p-6 space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="font-semibold flex items-center gap-2">
+              <LineChartIcon className="size-4 text-primary" />
+              {t("dashboard.forecastSection")}
+            </h3>
+            <Button asChild variant="ghost" size="sm">
+              <Link to="/forecast">{t("dashboard.viewAll")}</Link>
+            </Button>
+          </div>
+          {forecastCurrent ? (
+            <div className="space-y-3">
+              <div className="flex items-center justify-between p-3 rounded-md bg-muted/40">
+                <span className="text-sm text-muted-foreground">{t("forecast.expectedIncome")}</span>
+                <span className="font-semibold">€ {forecastIncome.toFixed(2)}</span>
+              </div>
+              <div className="flex items-center justify-between p-3 rounded-md bg-muted/40">
+                <span className="text-sm text-muted-foreground">{t("forecast.totalExpenses")}</span>
+                <span className="font-semibold">€ {forecastExpenses.toFixed(2)}</span>
+              </div>
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground py-6 text-center">
+              {t("dashboard.noForecast")}
+            </p>
+          )}
+        </Card>
+
+        <Card className="p-6 space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="font-semibold flex items-center gap-2">
+              <CalendarClock className="size-4 text-primary" />
+              {t("dashboard.calendarSection")}
+            </h3>
+            <Button asChild variant="ghost" size="sm">
+              <Link to="/calendar">{t("dashboard.viewAll")}</Link>
+            </Button>
+          </div>
+          {!upcomingEvents?.length ? (
+            <p className="text-sm text-muted-foreground py-6 text-center">
+              {t("dashboard.noUpcoming")}
+            </p>
+          ) : (
+            <div className="space-y-2">
+              {upcomingEvents.map((e) => (
+                <div key={e.id} className="flex items-center gap-3 p-3 rounded-md bg-muted/40">
+                  <span className="w-2 h-2 rounded-full bg-[#9a3412] shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <div className="font-medium text-sm truncate">{e.title}</div>
+                    <div className="text-xs text-muted-foreground">
+                      {new Date(e.date).toLocaleDateString(i18n.language)}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </Card>
       </div>
     </div>
