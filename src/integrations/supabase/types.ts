@@ -267,6 +267,7 @@ export type Database = {
         | "abbigliamento"
         | "risparmio"
         | "altro"
+        | "stipendio"
       transaction_type: "income" | "expense"
     }
     CompositeTypes: {
@@ -408,6 +409,7 @@ export const Constants = {
         "abbigliamento",
         "risparmio",
         "altro",
+        "stipendio",
       ],
       transaction_type: ["income", "expense"],
     },
