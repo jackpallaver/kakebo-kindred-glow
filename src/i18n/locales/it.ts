@@ -72,6 +72,11 @@ const it = {
     noGoal: "Non hai ancora impostato un obiettivo",
     setGoal: "Imposta obiettivo",
     noData: "Nessun dato ancora. Aggiungi il tuo primo movimento!",
+    forecastSection: "Previsioni del mese",
+    calendarSection: "Prossime scadenze",
+    viewAll: "Vedi tutto",
+    noForecast: "Nessuna previsione per questo mese",
+    noUpcoming: "Nessuna scadenza in arrivo",
   },
   transactions: {
     title: "I tuoi movimenti",

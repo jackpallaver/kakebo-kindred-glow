@@ -74,6 +74,11 @@ const fr: Translation = {
     noGoal: "Vous n'avez pas encore défini d'objectif",
     setGoal: "Définir un objectif",
     noData: "Pas encore de données. Ajoutez votre premier mouvement!",
+    forecastSection: "Prévisions du mois",
+    calendarSection: "Prochaines échéances",
+    viewAll: "Tout voir",
+    noForecast: "Aucune prévision pour ce mois",
+    noUpcoming: "Aucune échéance à venir",
   },
   transactions: {
     title: "Vos mouvements",

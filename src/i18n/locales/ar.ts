@@ -74,6 +74,11 @@ const ar: Translation = {
     noGoal: "لم تحدد هدفاً بعد",
     setGoal: "حدد هدفاً",
     noData: "لا توجد بيانات بعد. أضف أول حركة!",
+    forecastSection: "توقعات الشهر",
+    calendarSection: "المواعيد القادمة",
+    viewAll: "عرض الكل",
+    noForecast: "لا يوجد توقع لهذا الشهر",
+    noUpcoming: "لا مواعيد قادمة",
   },
   transactions: {
     title: "حركاتك",

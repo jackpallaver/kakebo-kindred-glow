@@ -74,6 +74,11 @@ const en: Translation = {
     noGoal: "You haven't set a goal yet",
     setGoal: "Set goal",
     noData: "No data yet. Add your first transaction!",
+    forecastSection: "Monthly forecast",
+    calendarSection: "Upcoming reminders",
+    viewAll: "View all",
+    noForecast: "No forecast set for this month",
+    noUpcoming: "No upcoming reminders",
   },
   transactions: {
     title: "Your transactions",
