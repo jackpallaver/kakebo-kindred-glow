@@ -5,10 +5,6 @@ import { Lightbulb } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 
-export const Route = createFileRoute("/_authenticated/tips")({
-  component: TipsPage,
-});
-
 const STATIC_TIPS: Record<string, Array<{ title: string; body: string; category: string }>> = {
   it: [
     { title: "Fai la lista della spesa", body: "Preparare una lista prima di uscire riduce gli acquisti impulsivi del 30%.", category: "Spesa" },
