@@ -1,0 +1,189 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
+import { TrendingUp, TrendingDown, PiggyBank, Target } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { fetchMonthlyStats, fetchYearlySavings } from "@/lib/kakebo";
+import { CATEGORY_COLORS, type Category } from "@/lib/categories";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+
+export const Route = createFileRoute("/_authenticated/dashboard")({
+  component: Dashboard,
+});
+
+function Dashboard() {
+  const { t } = useTranslation();
+  const { user } = Route.useRouteContext();
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth() + 1;
+
+  const { data: profile } = useQuery({
+    queryKey: ["profile", user.id],
+    queryFn: async () => {
+      const { data } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle();
+      return data;
+    },
+  });
+
+  const { data: goal } = useQuery({
+    queryKey: ["goal", user.id, year],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("annual_goals")
+        .select("*")
+        .eq("user_id", user.id)
+        .eq("year", year)
+        .maybeSingle();
+      return data;
+    },
+  });
+
+  const { data: stats } = useQuery({
+    queryKey: ["stats", user.id, year, month],
+    queryFn: () => fetchMonthlyStats(user.id, year, month),
+  });
+
+  const { data: yearly } = useQuery({
+    queryKey: ["yearly", user.id, year],
+    queryFn: () => fetchYearlySavings(user.id, year),
+  });
+
+  const yearSavings = (yearly ?? []).reduce((a, b) => a + Math.max(b.savings, 0), 0);
+  const goalProgress = goal ? Math.min(100, (yearSavings / Number(goal.target_amount)) * 100) : 0;
+
+  const pieData = Object.entries(stats?.byCategory ?? {}).map(([cat, val]) => ({
+    name: t(`categories.${cat}`),
+    value: val,
+    color: CATEGORY_COLORS[cat as Category] ?? "gray",
+  }));
+
+  const barData = (yearly ?? []).map((m) => ({
+    month: new Date(year, m.month - 1, 1).toLocaleDateString(undefined, { month: "short" }),
+    savings: Math.max(m.savings, 0),
+  }));
+
+  const challenge = 50;
+  const challengeProgress = Math.min(100, ((stats?.savings ?? 0) / challenge) * 100);
+
+  return (
+    <div className="p-4 md:p-6 space-y-6 max-w-7xl mx-auto">
+      <div>
+        <h1 className="text-2xl md:text-3xl font-display font-bold">
+          {t("dashboard.greeting", { name: profile?.full_name ?? "" })}
+        </h1>
+        <p className="text-muted-foreground">{t("dashboard.title")}</p>
+      </div>
+
+      {!goal && (
+        <Card className="p-6 flex items-center justify-between" style={{ background: "var(--gradient-soft)" }}>
+          <div>
+            <p className="font-medium">{t("dashboard.noGoal")}</p>
+          </div>
+          <Button asChild style={{ background: "var(--gradient-brand)" }}>
+            <Link to="/onboarding">{t("dashboard.setGoal")}</Link>
+          </Button>
+        </Card>
+      )}
+
+      {/* KPI row */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <Card className="p-4 space-y-1">
+          <div className="flex items-center gap-2 text-muted-foreground text-sm">
+            <TrendingUp className="size-4 text-success" />
+            {t("dashboard.monthlyIncome")}
+          </div>
+          <div className="text-2xl font-display font-bold">€ {(stats?.income ?? 0).toFixed(2)}</div>
+        </Card>
+        <Card className="p-4 space-y-1">
+          <div className="flex items-center gap-2 text-muted-foreground text-sm">
+            <TrendingDown className="size-4 text-destructive" />
+            {t("dashboard.monthlyExpenses")}
+          </div>
+          <div className="text-2xl font-display font-bold">€ {(stats?.expenses ?? 0).toFixed(2)}</div>
+        </Card>
+        <Card className="p-4 space-y-1" style={{ background: "var(--gradient-brand)", color: "white" }}>
+          <div className="flex items-center gap-2 text-sm opacity-90">
+            <PiggyBank className="size-4" />
+            {t("dashboard.monthlySavings")}
+          </div>
+          <div className="text-2xl font-display font-bold">€ {(stats?.savings ?? 0).toFixed(2)}</div>
+        </Card>
+      </div>
+
+      {/* Challenge + Goal */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Card className="p-6 space-y-3">
+          <div className="flex items-center justify-between">
+            <h3 className="font-semibold flex items-center gap-2">
+              🎯 {t("dashboard.monthlyChallenge")}
+            </h3>
+            <span className="text-sm text-muted-foreground">{challengeProgress.toFixed(0)}%</span>
+          </div>
+          <p className="text-sm text-muted-foreground">
+            {t("dashboard.challengeCopy", { amount: challenge })}
+          </p>
+          <Progress value={challengeProgress} />
+        </Card>
+
+        {goal && (
+          <Card className="p-6 space-y-3">
+            <div className="flex items-center justify-between">
+              <h3 className="font-semibold flex items-center gap-2">
+                <Target className="size-4" />
+                {t("dashboard.goalProgress")}
+              </h3>
+              <span className="text-sm text-muted-foreground">{goalProgress.toFixed(0)}%</span>
+            </div>
+            <p className="text-sm text-muted-foreground">{goal.description}</p>
+            <Progress value={goalProgress} />
+            <p className="text-xs text-muted-foreground">
+              € {yearSavings.toFixed(2)} / € {Number(goal.target_amount).toFixed(2)}
+            </p>
+          </Card>
+        )}
+      </div>
+
+      {/* Charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <Card className="p-6">
+          <h3 className="font-semibold mb-4">{t("dashboard.spendingByCategory")}</h3>
+          {pieData.length === 0 ? (
+            <p className="text-sm text-muted-foreground text-center py-12">{t("dashboard.noData")}</p>
+          ) : (
+            <div className="h-64">
+              <ResponsiveContainer>
+                <PieChart>
+                  <Pie data={pieData} dataKey="value" nameKey="name" innerRadius={50} outerRadius={90} paddingAngle={2}>
+                    {pieData.map((d, i) => (
+                      <Cell key={i} fill={d.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip formatter={(v: number) => `€ ${v.toFixed(2)}`} />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          )}
+        </Card>
+
+        <Card className="p-6">
+          <h3 className="font-semibold mb-4">{t("dashboard.savingsTrend")}</h3>
+          <div className="h-64">
+            <ResponsiveContainer>
+              <BarChart data={barData}>
+                <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
+                <XAxis dataKey="month" fontSize={12} />
+                <YAxis fontSize={12} />
+                <Tooltip formatter={(v: number) => `€ ${v.toFixed(2)}`} />
+                <Bar dataKey="savings" fill="var(--primary)" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </Card>
+      </div>
+    </div>
+  );
+}
