@@ -97,6 +97,11 @@ const fr: Translation = {
     expectedExpenses: "Dépenses prévues par catégorie",
     vs: "Réel vs Prévu",
     tooltip: "Indiquez combien vous pensez gagner et dépenser ce mois, par catégorie.",
+    history: "Historique des prévisions",
+    currentMonth: "Prévision de ce mois",
+    previous: "Mois précédents",
+    empty: "Aucune prévision enregistrée",
+    totalExpenses: "Total des dépenses prévues",
   },
   calendar: {
     title: "Calendrier et échéances",

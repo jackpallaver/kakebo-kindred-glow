@@ -97,6 +97,11 @@ const ar: Translation = {
     expectedExpenses: "المصاريف المتوقعة حسب الفئة",
     vs: "الفعلي مقابل المتوقع",
     tooltip: "أدخل كم تتوقع أن تكسب وتنفق هذا الشهر، لكل فئة.",
+    history: "سجل التوقعات",
+    currentMonth: "توقع هذا الشهر",
+    previous: "الأشهر السابقة",
+    empty: "لا يوجد توقع محفوظ",
+    totalExpenses: "إجمالي المصروفات المتوقعة",
   },
   calendar: {
     title: "التقويم والمواعيد",

@@ -97,6 +97,11 @@ const en: Translation = {
     expectedExpenses: "Expected expenses by category",
     vs: "Actual vs Forecast",
     tooltip: "Enter how much you expect to earn and spend this month, per category.",
+    history: "Forecast history",
+    currentMonth: "This month's forecast",
+    previous: "Previous months",
+    empty: "No forecast saved yet",
+    totalExpenses: "Total expected expenses",
   },
   calendar: {
     title: "Calendar & reminders",

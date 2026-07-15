@@ -95,6 +95,11 @@ const it = {
     expectedExpenses: "Uscite previste per categoria",
     vs: "Reale vs Previsto",
     tooltip: "Inserisci quanto pensi di guadagnare e spendere questo mese, per categoria.",
+    history: "Storico previsioni",
+    currentMonth: "Previsione di questo mese",
+    previous: "Mesi precedenti",
+    empty: "Nessuna previsione salvata",
+    totalExpenses: "Uscite totali previste",
   },
   calendar: {
     title: "Calendario e scadenze",
