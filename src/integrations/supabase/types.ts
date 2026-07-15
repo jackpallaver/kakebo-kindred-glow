@@ -14,16 +14,260 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      annual_goals: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          target_amount: number
+          updated_at: string
+          user_id: string
+          year: number
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          id?: string
+          target_amount: number
+          updated_at?: string
+          user_id: string
+          year: number
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          target_amount?: number
+          updated_at?: string
+          user_id?: string
+          year?: number
+        }
+        Relationships: []
+      }
+      calendar_events: {
+        Row: {
+          created_at: string
+          date: string
+          id: string
+          note: string | null
+          reminder_at: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          date: string
+          id?: string
+          note?: string | null
+          reminder_at?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          id?: string
+          note?: string | null
+          reminder_at?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      monthly_forecasts: {
+        Row: {
+          created_at: string
+          expected_expenses: Json
+          expected_income: number
+          id: string
+          month: number
+          updated_at: string
+          user_id: string
+          year: number
+        }
+        Insert: {
+          created_at?: string
+          expected_expenses?: Json
+          expected_income?: number
+          id?: string
+          month: number
+          updated_at?: string
+          user_id: string
+          year: number
+        }
+        Update: {
+          created_at?: string
+          expected_expenses?: Json
+          expected_income?: number
+          id?: string
+          month?: number
+          updated_at?: string
+          user_id?: string
+          year?: number
+        }
+        Relationships: []
+      }
+      operator_assignments: {
+        Row: {
+          created_at: string
+          id: string
+          operator_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          operator_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          operator_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          full_name: string | null
+          id: string
+          language: Database["public"]["Enums"]["app_language"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          full_name?: string | null
+          id: string
+          language?: Database["public"]["Enums"]["app_language"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          language?: Database["public"]["Enums"]["app_language"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      tips: {
+        Row: {
+          body: string
+          category: string
+          created_at: string
+          id: string
+          language: Database["public"]["Enums"]["app_language"]
+          slug: string
+          title: string
+        }
+        Insert: {
+          body: string
+          category: string
+          created_at?: string
+          id?: string
+          language: Database["public"]["Enums"]["app_language"]
+          slug: string
+          title: string
+        }
+        Update: {
+          body?: string
+          category?: string
+          created_at?: string
+          id?: string
+          language?: Database["public"]["Enums"]["app_language"]
+          slug?: string
+          title?: string
+        }
+        Relationships: []
+      }
+      transactions: {
+        Row: {
+          amount: number
+          category: Database["public"]["Enums"]["transaction_category"]
+          created_at: string
+          date: string
+          id: string
+          note: string | null
+          type: Database["public"]["Enums"]["transaction_type"]
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          category?: Database["public"]["Enums"]["transaction_category"]
+          created_at?: string
+          date?: string
+          id?: string
+          note?: string | null
+          type: Database["public"]["Enums"]["transaction_type"]
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          category?: Database["public"]["Enums"]["transaction_category"]
+          created_at?: string
+          date?: string
+          id?: string
+          note?: string | null
+          type?: Database["public"]["Enums"]["transaction_type"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_assigned_operator: {
+        Args: { _operator_id: string; _user_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_language: "it" | "en" | "fr" | "ar"
+      app_role: "user" | "operator"
+      transaction_category:
+        | "alimentari"
+        | "bollette"
+        | "trasporti"
+        | "casa"
+        | "salute"
+        | "svago"
+        | "educazione"
+        | "abbigliamento"
+        | "risparmio"
+        | "altro"
+      transaction_type: "income" | "expense"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +394,22 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_language: ["it", "en", "fr", "ar"],
+      app_role: ["user", "operator"],
+      transaction_category: [
+        "alimentari",
+        "bollette",
+        "trasporti",
+        "casa",
+        "salute",
+        "svago",
+        "educazione",
+        "abbigliamento",
+        "risparmio",
+        "altro",
+      ],
+      transaction_type: ["income", "expense"],
+    },
   },
 } as const
