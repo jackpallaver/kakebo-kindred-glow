@@ -19,11 +19,16 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 
 export function AppSidebar({ isOperator }: { isOperator: boolean }) {
   const { t } = useTranslation();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { isMobile, setOpenMobile } = useSidebar();
+  const closeOnMobile = () => {
+    if (isMobile) setOpenMobile(false);
+  };
 
   const items = [
     { to: "/dashboard", icon: LayoutDashboard, label: t("nav.dashboard") },
@@ -55,7 +60,7 @@ export function AppSidebar({ isOperator }: { isOperator: boolean }) {
               {items.map((item) => (
                 <SidebarMenuItem key={item.to}>
                   <SidebarMenuButton asChild isActive={pathname === item.to}>
-                    <Link to={item.to} className="flex items-center gap-2">
+                    <Link to={item.to} className="flex items-center gap-2" onClick={closeOnMobile}>
                       <item.icon className="size-4" />
                       <span>{item.label}</span>
                     </Link>
@@ -73,7 +78,7 @@ export function AppSidebar({ isOperator }: { isOperator: boolean }) {
               <SidebarMenu>
                 <SidebarMenuItem>
                   <SidebarMenuButton asChild isActive={pathname.startsWith("/operator")}>
-                    <Link to="/operator/users" className="flex items-center gap-2">
+                    <Link to="/operator/users" className="flex items-center gap-2" onClick={closeOnMobile}>
                       <Users className="size-4" />
                       <span>{t("nav.operatorUsers")}</span>
                     </Link>

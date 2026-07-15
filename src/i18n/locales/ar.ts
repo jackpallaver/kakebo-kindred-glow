@@ -74,6 +74,11 @@ const ar: Translation = {
     noGoal: "لم تحدد هدفاً بعد",
     setGoal: "حدد هدفاً",
     noData: "لا توجد بيانات بعد. أضف أول حركة!",
+    forecastSection: "توقعات الشهر",
+    calendarSection: "المواعيد القادمة",
+    viewAll: "عرض الكل",
+    noForecast: "لا يوجد توقع لهذا الشهر",
+    noUpcoming: "لا مواعيد قادمة",
   },
   transactions: {
     title: "حركاتك",
@@ -92,6 +97,11 @@ const ar: Translation = {
     expectedExpenses: "المصاريف المتوقعة حسب الفئة",
     vs: "الفعلي مقابل المتوقع",
     tooltip: "أدخل كم تتوقع أن تكسب وتنفق هذا الشهر، لكل فئة.",
+    history: "سجل التوقعات",
+    currentMonth: "توقع هذا الشهر",
+    previous: "الأشهر السابقة",
+    empty: "لا يوجد توقع محفوظ",
+    totalExpenses: "إجمالي المصروفات المتوقعة",
   },
   calendar: {
     title: "التقويم والمواعيد",
@@ -133,6 +143,7 @@ const ar: Translation = {
     abbigliamento: "ملابس",
     risparmio: "توفير",
     altro: "أخرى",
+    stipendio: "راتب",
   },
 };
 

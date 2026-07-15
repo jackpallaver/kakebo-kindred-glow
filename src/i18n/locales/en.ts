@@ -74,6 +74,11 @@ const en: Translation = {
     noGoal: "You haven't set a goal yet",
     setGoal: "Set goal",
     noData: "No data yet. Add your first transaction!",
+    forecastSection: "Monthly forecast",
+    calendarSection: "Upcoming reminders",
+    viewAll: "View all",
+    noForecast: "No forecast set for this month",
+    noUpcoming: "No upcoming reminders",
   },
   transactions: {
     title: "Your transactions",
@@ -92,6 +97,11 @@ const en: Translation = {
     expectedExpenses: "Expected expenses by category",
     vs: "Actual vs Forecast",
     tooltip: "Enter how much you expect to earn and spend this month, per category.",
+    history: "Forecast history",
+    currentMonth: "This month's forecast",
+    previous: "Previous months",
+    empty: "No forecast saved yet",
+    totalExpenses: "Total expected expenses",
   },
   calendar: {
     title: "Calendar & reminders",
@@ -133,6 +143,7 @@ const en: Translation = {
     abbigliamento: "Clothing",
     risparmio: "Savings",
     altro: "Other",
+    stipendio: "Salary",
   },
 };
 

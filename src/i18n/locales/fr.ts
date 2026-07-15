@@ -74,6 +74,11 @@ const fr: Translation = {
     noGoal: "Vous n'avez pas encore défini d'objectif",
     setGoal: "Définir un objectif",
     noData: "Pas encore de données. Ajoutez votre premier mouvement!",
+    forecastSection: "Prévisions du mois",
+    calendarSection: "Prochaines échéances",
+    viewAll: "Tout voir",
+    noForecast: "Aucune prévision pour ce mois",
+    noUpcoming: "Aucune échéance à venir",
   },
   transactions: {
     title: "Vos mouvements",
@@ -92,6 +97,11 @@ const fr: Translation = {
     expectedExpenses: "Dépenses prévues par catégorie",
     vs: "Réel vs Prévu",
     tooltip: "Indiquez combien vous pensez gagner et dépenser ce mois, par catégorie.",
+    history: "Historique des prévisions",
+    currentMonth: "Prévision de ce mois",
+    previous: "Mois précédents",
+    empty: "Aucune prévision enregistrée",
+    totalExpenses: "Total des dépenses prévues",
   },
   calendar: {
     title: "Calendrier et échéances",
@@ -133,6 +143,7 @@ const fr: Translation = {
     abbigliamento: "Vêtements",
     risparmio: "Épargne",
     altro: "Autre",
+    stipendio: "Salaire",
   },
 };
 

@@ -9,6 +9,7 @@ import {
   Shirt,
   PiggyBank,
   MoreHorizontal,
+  Banknote,
   type LucideIcon,
 } from "lucide-react";
 
@@ -23,6 +24,7 @@ export const CATEGORIES = [
   "abbigliamento",
   "risparmio",
   "altro",
+  "stipendio",
 ] as const;
 
 export type Category = (typeof CATEGORIES)[number];
@@ -38,6 +40,7 @@ export const CATEGORY_ICONS: Record<Category, LucideIcon> = {
   abbigliamento: Shirt,
   risparmio: PiggyBank,
   altro: MoreHorizontal,
+  stipendio: Banknote,
 };
 
 export const CATEGORY_COLORS: Record<Category, string> = {
@@ -51,4 +54,5 @@ export const CATEGORY_COLORS: Record<Category, string> = {
   abbigliamento: "oklch(0.65 0.15 350)",
   risparmio: "oklch(0.60 0.14 155)",
   altro: "oklch(0.55 0.02 220)",
+  stipendio: "oklch(0.60 0.15 145)",
 };

@@ -72,6 +72,11 @@ const it = {
     noGoal: "Non hai ancora impostato un obiettivo",
     setGoal: "Imposta obiettivo",
     noData: "Nessun dato ancora. Aggiungi il tuo primo movimento!",
+    forecastSection: "Previsioni del mese",
+    calendarSection: "Prossime scadenze",
+    viewAll: "Vedi tutto",
+    noForecast: "Nessuna previsione per questo mese",
+    noUpcoming: "Nessuna scadenza in arrivo",
   },
   transactions: {
     title: "I tuoi movimenti",
@@ -90,6 +95,11 @@ const it = {
     expectedExpenses: "Uscite previste per categoria",
     vs: "Reale vs Previsto",
     tooltip: "Inserisci quanto pensi di guadagnare e spendere questo mese, per categoria.",
+    history: "Storico previsioni",
+    currentMonth: "Previsione di questo mese",
+    previous: "Mesi precedenti",
+    empty: "Nessuna previsione salvata",
+    totalExpenses: "Uscite totali previste",
   },
   calendar: {
     title: "Calendario e scadenze",
@@ -131,6 +141,7 @@ const it = {
     abbigliamento: "Abbigliamento",
     risparmio: "Risparmio",
     altro: "Altro",
+    stipendio: "Stipendio",
   },
 };
 

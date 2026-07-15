@@ -118,7 +118,10 @@ function CalendarPage() {
             selected={selected}
             onSelect={setSelected}
             modifiers={{ hasEvent: daysWithEvents }}
-            modifiersClassNames={{ hasEvent: "font-bold text-primary underline" }}
+            modifiersClassNames={{
+              hasEvent:
+                "font-bold text-[#9a3412] relative after:content-[''] after:absolute after:bottom-1 after:left-1/2 after:-translate-x-1/2 after:w-1.5 after:h-1.5 after:rounded-full after:bg-[#9a3412]",
+            }}
             className="pointer-events-auto"
           />
         </Card>

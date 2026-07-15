@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet, redirect, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect, Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
@@ -24,6 +24,8 @@ function AuthedLayout() {
   const { user } = Route.useRouteContext();
   const navigate = useNavigate();
   const qc = useQueryClient();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const hideQuickAdd = pathname === "/settings" || pathname === "/forecast";
 
   const { data: roles } = useQuery({
     queryKey: ["roles", user.id],
@@ -67,15 +69,17 @@ function AuthedLayout() {
         <div className="flex-1 flex flex-col min-w-0">
           <header className="h-14 border-b flex items-center justify-between px-4 bg-card/50 backdrop-blur">
             <div className="flex items-center gap-2">
-              <SidebarTrigger />
+              <SidebarTrigger className="size-10 border border-primary/30 bg-primary/10 text-primary hover:bg-primary/20 rounded-md [&_svg]:size-5" />
               <Link to="/dashboard" className="font-display font-semibold">
                 Kakebo
               </Link>
             </div>
             <div className="flex items-center gap-2">
-              <div className="hidden md:block">
-                <QuickAddDialog userId={user.id} />
-              </div>
+              {!hideQuickAdd && (
+                <div className="hidden md:block">
+                  <QuickAddDialog userId={user.id} />
+                </div>
+              )}
               <LanguageSwitcher userId={user.id} />
               <Button variant="ghost" size="icon" onClick={signOut} aria-label="Sign out">
                 <LogOut className="size-4" />
@@ -85,9 +89,11 @@ function AuthedLayout() {
           <main className="flex-1 overflow-y-auto">
             <Outlet />
           </main>
-          <div className="md:hidden fixed bottom-4 right-4 z-40">
-            <QuickAddDialog userId={user.id} />
-          </div>
+          {!hideQuickAdd && (
+            <div className="md:hidden fixed bottom-4 right-4 z-40">
+              <QuickAddDialog userId={user.id} />
+            </div>
+          )}
         </div>
       </div>
     </SidebarProvider>
