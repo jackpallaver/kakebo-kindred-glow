@@ -5,10 +5,9 @@ import { toast } from "sonner";
 import { Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { CATEGORY_ICONS, type Category } from "@/lib/categories";
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { InfoTooltip } from "@/components/info-tooltip";
-import { QuickAddDialog } from "@/components/quick-add-dialog";
+import { Card } from "@/components/ui/card";
 
 export const Route = createFileRoute("/_authenticated/transactions")({
   component: TransactionsPage,
@@ -42,14 +41,11 @@ function TransactionsPage() {
 
   return (
     <div className="p-4 md:p-6 max-w-4xl mx-auto space-y-4">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-display font-bold flex items-center gap-2">
-            {t("transactions.title")}
-            <InfoTooltip text={t("transactions.tooltip")} />
-          </h1>
-        </div>
-        <QuickAddDialog userId={user.id} />
+      <div>
+        <h1 className="text-2xl font-display font-bold flex items-center gap-2">
+          {t("transactions.title")}
+          <InfoTooltip text={t("transactions.tooltip")} />
+        </h1>
       </div>
 
       {!transactions?.length ? (

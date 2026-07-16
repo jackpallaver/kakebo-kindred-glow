@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
 import { TrendingUp, TrendingDown, PiggyBank, Target, LineChart as LineChartIcon, CalendarClock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { fetchMonthlyStats, fetchYearlySavings } from "@/lib/kakebo";
@@ -29,18 +29,20 @@ function Dashboard() {
     },
   });
 
-  const { data: goal } = useQuery({
-    queryKey: ["goal", user.id, year],
+  const { data: goals } = useQuery({
+    queryKey: ["goals", user.id, year],
     queryFn: async () => {
       const { data } = await supabase
         .from("annual_goals")
         .select("*")
         .eq("user_id", user.id)
         .eq("year", year)
-        .maybeSingle();
-      return data;
+        .order("created_at", { ascending: true });
+      return data ?? [];
     },
   });
+  const goalTotal = (goals ?? []).reduce((a, g) => a + Number(g.target_amount), 0);
+  const hasGoal = (goals?.length ?? 0) > 0;
 
   const { data: stats } = useQuery({
     queryKey: ["stats", user.id, year, month],
@@ -82,7 +84,7 @@ function Dashboard() {
   });
 
   const yearSavings = (yearly ?? []).reduce((a, b) => a + Math.max(b.savings, 0), 0);
-  const goalProgress = goal ? Math.min(100, (yearSavings / Number(goal.target_amount)) * 100) : 0;
+  const goalProgress = goalTotal > 0 ? Math.min(100, (yearSavings / goalTotal) * 100) : 0;
 
   const pieData = Object.entries(stats?.byCategory ?? {}).map(([cat, val]) => ({
     name: t(`categories.${cat}`),
@@ -95,7 +97,7 @@ function Dashboard() {
     savings: Math.max(m.savings, 0),
   }));
 
-  const challenge = 50;
+  const challenge = Number((profile as { monthly_challenge_amount?: number } | null)?.monthly_challenge_amount ?? 50);
   const challengeProgress = Math.min(100, ((stats?.savings ?? 0) / challenge) * 100);
 
   const forecastIncome = Number(forecastCurrent?.expected_income ?? 0);
@@ -107,7 +109,7 @@ function Dashboard() {
     : 0;
 
   return (
-    <div className="p-4 md:p-6 space-y-6 max-w-7xl mx-auto">
+    <div className="p-4 md:p-6 pb-32 md:pb-6 space-y-6 max-w-7xl mx-auto">
       <div>
         <h1 className="text-2xl md:text-3xl font-display font-bold">
           {t("dashboard.greeting", { name: profile?.full_name ?? "" })}
@@ -115,7 +117,7 @@ function Dashboard() {
         <p className="text-muted-foreground">{t("dashboard.title")}</p>
       </div>
 
-      {!goal && (
+      {!hasGoal && (
         <Card className="p-6 flex items-center justify-between" style={{ background: "var(--gradient-soft)" }}>
           <div>
             <p className="font-medium">{t("dashboard.noGoal")}</p>
@@ -166,7 +168,7 @@ function Dashboard() {
           <Progress value={challengeProgress} />
         </Card>
 
-        {goal && (
+        {hasGoal && (
           <Card className="p-6 space-y-3">
             <div className="flex items-center justify-between">
               <h3 className="font-semibold flex items-center gap-2">
@@ -175,10 +177,17 @@ function Dashboard() {
               </h3>
               <span className="text-sm text-muted-foreground">{goalProgress.toFixed(0)}%</span>
             </div>
-            <p className="text-sm text-muted-foreground">{goal.description}</p>
+            <ul className="text-sm text-muted-foreground space-y-1">
+              {goals!.map((g) => (
+                <li key={g.id} className="flex justify-between gap-2">
+                  <span className="truncate">{g.description}</span>
+                  <span className="shrink-0">€ {Number(g.target_amount).toFixed(2)}</span>
+                </li>
+              ))}
+            </ul>
             <Progress value={goalProgress} />
             <p className="text-xs text-muted-foreground">
-              € {yearSavings.toFixed(2)} / € {Number(goal.target_amount).toFixed(2)}
+              € {yearSavings.toFixed(2)} / € {goalTotal.toFixed(2)}
             </p>
           </Card>
         )}
@@ -191,15 +200,16 @@ function Dashboard() {
           {pieData.length === 0 ? (
             <p className="text-sm text-muted-foreground text-center py-12">{t("dashboard.noData")}</p>
           ) : (
-            <div className="h-64">
+            <div className="h-72">
               <ResponsiveContainer>
                 <PieChart>
-                  <Pie data={pieData} dataKey="value" nameKey="name" innerRadius={50} outerRadius={90} paddingAngle={2}>
+                  <Pie data={pieData} dataKey="value" nameKey="name" innerRadius={45} outerRadius={80} paddingAngle={2}>
                     {pieData.map((d, i) => (
                       <Cell key={i} fill={d.color} />
                     ))}
                   </Pie>
                   <Tooltip formatter={(v: number) => `€ ${v.toFixed(2)}`} />
+                  <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={{ fontSize: 12 }} />
                 </PieChart>
               </ResponsiveContainer>
             </div>

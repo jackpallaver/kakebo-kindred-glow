@@ -25,7 +25,8 @@ function AuthedLayout() {
   const navigate = useNavigate();
   const qc = useQueryClient();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const hideQuickAdd = pathname === "/settings" || pathname === "/forecast";
+  const hideQuickAdd =
+    pathname === "/settings" || pathname === "/forecast" || pathname === "/calendar";
 
   const { data: roles } = useQuery({
     queryKey: ["roles", user.id],
@@ -67,7 +68,7 @@ function AuthedLayout() {
       <div className="min-h-screen flex w-full bg-background">
         <AppSidebar isOperator={isOperator} />
         <div className="flex-1 flex flex-col min-w-0">
-          <header className="h-14 border-b flex items-center justify-between px-4 bg-card/50 backdrop-blur">
+          <header className="sticky top-0 z-30 h-14 border-b flex items-center justify-between px-4 bg-card/95 backdrop-blur">
             <div className="flex items-center gap-2">
               <SidebarTrigger className="size-10 border border-primary/30 bg-primary/10 text-primary hover:bg-primary/20 rounded-md [&_svg]:size-5" />
               <Link to="/dashboard" className="font-display font-semibold">

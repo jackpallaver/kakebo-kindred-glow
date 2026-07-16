@@ -122,6 +122,8 @@ const en: Translation = {
     profile: "Profile",
     languageSection: "Language",
     goalSection: "Yearly goal",
+    monthlyChallenge: "Monthly challenge amount (€)",
+    monthlyChallengeHint: "How much you want to save every month",
   },
   operator: {
     title: "Assigned beneficiaries",
