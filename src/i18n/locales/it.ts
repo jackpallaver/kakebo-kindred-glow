@@ -120,6 +120,8 @@ const it = {
     profile: "Profilo",
     languageSection: "Lingua",
     goalSection: "Obiettivo annuale",
+    monthlyChallenge: "Importo sfida mensile (€)",
+    monthlyChallengeHint: "Quanto vuoi risparmiare ogni mese",
   },
   operator: {
     title: "Beneficiari assegnati",
