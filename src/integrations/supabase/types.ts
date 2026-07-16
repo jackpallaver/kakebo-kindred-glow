@@ -134,6 +134,7 @@ export type Database = {
           full_name: string | null
           id: string
           language: Database["public"]["Enums"]["app_language"]
+          monthly_challenge_amount: number
           updated_at: string
         }
         Insert: {
@@ -141,6 +142,7 @@ export type Database = {
           full_name?: string | null
           id: string
           language?: Database["public"]["Enums"]["app_language"]
+          monthly_challenge_amount?: number
           updated_at?: string
         }
         Update: {
@@ -148,6 +150,7 @@ export type Database = {
           full_name?: string | null
           id?: string
           language?: Database["public"]["Enums"]["app_language"]
+          monthly_challenge_amount?: number
           updated_at?: string
         }
         Relationships: []

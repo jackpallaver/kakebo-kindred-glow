@@ -1,0 +1,2 @@
+ALTER TABLE public.annual_goals DROP CONSTRAINT IF EXISTS annual_goals_user_id_year_key;
+ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS monthly_challenge_amount NUMERIC(12,2) NOT NULL DEFAULT 50;
