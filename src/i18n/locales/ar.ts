@@ -122,6 +122,8 @@ const ar: Translation = {
     profile: "الملف الشخصي",
     languageSection: "اللغة",
     goalSection: "الهدف السنوي",
+    monthlyChallenge: "مبلغ التحدي الشهري (€)",
+    monthlyChallengeHint: "كم تريد أن توفر كل شهر",
   },
   operator: {
     title: "المستفيدون المعيّنون",
