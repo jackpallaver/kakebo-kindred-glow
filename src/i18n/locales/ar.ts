@@ -89,6 +89,10 @@ const ar: Translation = {
     noteOptional: "ملاحظة (اختياري)",
     deleteConfirm: "حذف هذه الحركة؟",
     tooltip: "سجّل كل دخل ومصروف هنا. النظام يحسب كل شيء لك.",
+    exportCsv: "تصدير CSV",
+    newCategory: "فئة جديدة",
+    categoryName: "اسم الفئة",
+    customCategories: "فئات مخصصة",
   },
   forecast: {
     title: "التوقعات الشهرية",
@@ -111,6 +115,10 @@ const ar: Translation = {
     reminderLabel: "تذكير (اختياري)",
     upcoming: "المواعيد القادمة",
     tooltip: "تتبع الفواتير والمدفوعات والمواعيد المهمة.",
+    enableNotifications: "تفعيل الإشعارات",
+    notificationsOn: "الإشعارات مفعلة",
+    notificationsBlocked: "الإشعارات محظورة من المتصفح",
+    notifTitle: "تذكير كاكيبو",
   },
   tips: {
     title: "نصائح مفيدة",
@@ -124,6 +132,10 @@ const ar: Translation = {
     goalSection: "الهدف السنوي",
     monthlyChallenge: "مبلغ التحدي الشهري (€)",
     monthlyChallengeHint: "كم تريد أن توفر كل شهر",
+    diarySection: "مذكراتي",
+    diaryHint: "اكتب وضعك الحالي ونواياك. يمكنك ملؤها مرة واحدة فقط.",
+    diarySaved: "تم حفظ المذكرة — للقراءة فقط",
+    diaryPlaceholder: "كيف حالك اليوم؟ ما هي أهدافك وما الذي تريد تغييره؟",
   },
   operator: {
     title: "المستفيدون المعيّنون",

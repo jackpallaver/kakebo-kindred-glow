@@ -74,6 +74,27 @@ export type Database = {
         }
         Relationships: []
       }
+      custom_categories: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       monthly_forecasts: {
         Row: {
           created_at: string
@@ -131,6 +152,7 @@ export type Database = {
       profiles: {
         Row: {
           created_at: string
+          diary: string | null
           full_name: string | null
           id: string
           language: Database["public"]["Enums"]["app_language"]
@@ -139,6 +161,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          diary?: string | null
           full_name?: string | null
           id: string
           language?: Database["public"]["Enums"]["app_language"]
@@ -147,6 +170,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          diary?: string | null
           full_name?: string | null
           id?: string
           language?: Database["public"]["Enums"]["app_language"]
@@ -188,7 +212,7 @@ export type Database = {
       transactions: {
         Row: {
           amount: number
-          category: Database["public"]["Enums"]["transaction_category"]
+          category: string
           created_at: string
           date: string
           id: string
@@ -198,7 +222,7 @@ export type Database = {
         }
         Insert: {
           amount: number
-          category?: Database["public"]["Enums"]["transaction_category"]
+          category?: string
           created_at?: string
           date?: string
           id?: string
@@ -208,7 +232,7 @@ export type Database = {
         }
         Update: {
           amount?: number
-          category?: Database["public"]["Enums"]["transaction_category"]
+          category?: string
           created_at?: string
           date?: string
           id?: string

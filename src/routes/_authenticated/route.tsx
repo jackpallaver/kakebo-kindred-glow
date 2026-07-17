@@ -26,7 +26,10 @@ function AuthedLayout() {
   const qc = useQueryClient();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const hideQuickAdd =
-    pathname === "/settings" || pathname === "/forecast" || pathname === "/calendar";
+    pathname === "/settings" ||
+    pathname === "/forecast" ||
+    pathname === "/calendar" ||
+    pathname === "/tips";
 
   const { data: roles } = useQuery({
     queryKey: ["roles", user.id],

@@ -87,6 +87,10 @@ const it = {
     noteOptional: "Nota (facoltativo)",
     deleteConfirm: "Vuoi eliminare questo movimento?",
     tooltip: "Registra qui ogni entrata e uscita. Il sistema calcola tutto per te.",
+    exportCsv: "Esporta CSV",
+    newCategory: "Nuova categoria",
+    categoryName: "Nome della categoria",
+    customCategories: "Categorie personalizzate",
   },
   forecast: {
     title: "Previsioni mensili",
@@ -109,6 +113,10 @@ const it = {
     reminderLabel: "Promemoria (facoltativo)",
     upcoming: "Prossime scadenze",
     tooltip: "Annota bollette, pagamenti e scadenze importanti.",
+    enableNotifications: "Attiva notifiche",
+    notificationsOn: "Notifiche attive",
+    notificationsBlocked: "Notifiche bloccate dal browser",
+    notifTitle: "Promemoria Kakebo",
   },
   tips: {
     title: "Consigli utili",
@@ -122,6 +130,10 @@ const it = {
     goalSection: "Obiettivo annuale",
     monthlyChallenge: "Importo sfida mensile (€)",
     monthlyChallengeHint: "Quanto vuoi risparmiare ogni mese",
+    diarySection: "Il mio diario",
+    diaryHint: "Scrivi qui la tua situazione attuale e le tue intenzioni. Puoi compilarlo una sola volta.",
+    diarySaved: "Diario salvato — non modificabile",
+    diaryPlaceholder: "Come ti trovi oggi? Quali sono i tuoi obiettivi e cosa vuoi cambiare?",
   },
   operator: {
     title: "Beneficiari assegnati",

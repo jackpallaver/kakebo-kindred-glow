@@ -18,7 +18,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 export function QuickAddDialog({ userId, trigger }: { userId: string; trigger?: React.ReactNode }) {
   const { t } = useTranslation();
@@ -30,6 +30,34 @@ export function QuickAddDialog({ userId, trigger }: { userId: string; trigger?: 
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [note, setNote] = useState("");
   const [saving, setSaving] = useState(false);
+  const [newCat, setNewCat] = useState("");
+  const [addingCat, setAddingCat] = useState(false);
+
+  const { data: customCats } = useQuery({
+    queryKey: ["custom_categories", userId],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("custom_categories")
+        .select("name")
+        .eq("user_id", userId)
+        .order("name");
+      return (data ?? []).map((r) => r.name);
+    },
+    enabled: open,
+  });
+
+  async function addCustomCategory() {
+    const n = newCat.trim();
+    if (!n) return;
+    const { error } = await supabase
+      .from("custom_categories")
+      .insert({ user_id: userId, name: n });
+    if (error) return toast.error(error.message);
+    setNewCat("");
+    setAddingCat(false);
+    setCategory(n);
+    qc.invalidateQueries({ queryKey: ["custom_categories", userId] });
+  }
 
   async function submit() {
     const value = parseFloat(amount.replace(",", "."));
@@ -41,7 +69,7 @@ export function QuickAddDialog({ userId, trigger }: { userId: string; trigger?: 
     const { error } = await supabase.from("transactions").insert({
       user_id: userId,
       type,
-      category: category as never,
+      category: category,
       amount: value,
       date,
       note: note || null,
@@ -96,8 +124,42 @@ export function QuickAddDialog({ userId, trigger }: { userId: string; trigger?: 
                 {CATEGORIES.map((c) => (
                   <SelectItem key={c} value={c}>{t(`categories.${c}`)}</SelectItem>
                 ))}
+                {(customCats ?? []).map((c) => (
+                  <SelectItem key={c} value={c}>{c}</SelectItem>
+                ))}
               </SelectContent>
             </Select>
+            {addingCat ? (
+              <div className="flex gap-2 mt-2">
+                <Input
+                  autoFocus
+                  placeholder={t("transactions.categoryName")}
+                  value={newCat}
+                  onChange={(e) => setNewCat(e.target.value)}
+                />
+                <Button type="button" size="sm" onClick={addCustomCategory}>
+                  {t("common.add")}
+                </Button>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => { setAddingCat(false); setNewCat(""); }}
+                >
+                  {t("common.cancel")}
+                </Button>
+              </div>
+            ) : (
+              <Button
+                type="button"
+                variant="link"
+                size="sm"
+                className="px-0 mt-1 h-auto"
+                onClick={() => setAddingCat(true)}
+              >
+                <Plus className="size-3 mr-1" /> {t("transactions.newCategory")}
+              </Button>
+            )}
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>

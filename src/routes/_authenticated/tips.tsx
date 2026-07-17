@@ -1,9 +1,59 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { Lightbulb } from "lucide-react";
+import { Lightbulb, LifeBuoy, BookOpen, ExternalLink } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog, DialogContent, DialogHeader, DialogTitle,
+} from "@/components/ui/dialog";
+import { useState } from "react";
+
+const EMERGENCY_CONTENT: Record<string, { title: string; sections: Array<{ h: string; b: string }> }> = {
+  it: {
+    title: "Gestire le emergenze",
+    sections: [
+      { h: "Emergenze immediate", b: "112 (numero unico), 118 (emergenza sanitaria), 1522 (violenza di genere), Telefono Amico 02 2327 2327." },
+      { h: "Servizi territoriali", b: "Rivolgiti al tuo Comune (Servizi Sociali), al Consultorio ASL, ai CAF/Patronati per bonus, ISEE, sostegni al reddito." },
+      { h: "Debiti e sovraindebitamento", b: "Contatta un OCC (Organismo di Composizione della Crisi) presso l'Ordine dei Commercialisti o il Comune, oppure associazioni come Adiconsum o Movimento Consumatori. Non firmare mai riconoscimenti di debito senza consulenza." },
+      { h: "Se non arrivi a fine mese", b: "Caritas diocesana, Empori solidali, Banco Alimentare, Sportelli anti-usura (fondazioni regionali)." },
+      { h: "Cooperativa Progetto 92", b: "Contatta il tuo operatore di riferimento: è il primo aiuto per orientarti tra i servizi." },
+    ],
+  },
+  en: {
+    title: "Handling emergencies",
+    sections: [
+      { h: "Immediate help", b: "112 (Europe emergency), 118 (medical), 1522 (gender-based violence)." },
+      { h: "Local services", b: "Contact your City's social services, the local health authority, or a tax/benefits help desk (CAF)." },
+      { h: "Debt help", b: "Reach an over-indebtedness body (OCC) or a consumer association. Never sign debt acknowledgments without advice." },
+      { h: "Food & essentials", b: "Caritas, solidarity shops, food banks." },
+      { h: "Cooperativa Progetto 92", b: "Talk to your reference operator first." },
+    ],
+  },
+  fr: {
+    title: "Gérer les urgences",
+    sections: [
+      { h: "Aide immédiate", b: "112 (urgence européenne), 118 (médicale), 1522 (violences de genre)." },
+      { h: "Services locaux", b: "Contactez les services sociaux de votre commune, le centre de santé local ou un CAF." },
+      { h: "Endettement", b: "Adressez-vous à un organisme de médiation du surendettement ou à une association de consommateurs." },
+      { h: "Aide alimentaire", b: "Caritas, épiceries solidaires, banques alimentaires." },
+      { h: "Coopérative Progetto 92", b: "Parlez d'abord à votre opérateur référent." },
+    ],
+  },
+  ar: {
+    title: "التعامل مع الطوارئ",
+    sections: [
+      { h: "طوارئ فورية", b: "112 (رقم الطوارئ الأوروبي), 118 (طوارئ صحية), 1522 (العنف القائم على النوع)." },
+      { h: "الخدمات المحلية", b: "اتصل بالخدمات الاجتماعية في بلديتك أو مركز الصحة المحلي أو مركز CAF للدعم." },
+      { h: "الديون", b: "توجه إلى هيئة معالجة الإفراط في الاستدانة (OCC) أو جمعية للمستهلكين. لا توقع أي اعتراف بالدين دون استشارة." },
+      { h: "الغذاء والأساسيات", b: "كاريتاس، المتاجر التضامنية، بنوك الطعام." },
+      { h: "تعاونية Progetto 92", b: "تحدث أولاً مع المشغّل المرجعي." },
+    ],
+  },
+};
+
+const DEEP_DIVE_URL = "https://www.museodelrisparmio.it/";
 
 const STATIC_TIPS: Record<string, Array<{ title: string; body: string; category: string }>> = {
   it: [
@@ -42,6 +92,8 @@ export const Route = createFileRoute("/_authenticated/tips")({
 
 function TipsPage() {
   const { t, i18n } = useTranslation();
+  const [emergOpen, setEmergOpen] = useState(false);
+  const em = EMERGENCY_CONTENT[i18n.language] ?? EMERGENCY_CONTENT.it;
 
   const { data: tips } = useQuery({
     queryKey: ["tips", i18n.language],
@@ -58,6 +110,53 @@ function TipsPage() {
         <h1 className="text-2xl font-display font-bold">{t("tips.title")}</h1>
         <p className="text-muted-foreground">{t("tips.subtitle")}</p>
       </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <Button
+          type="button"
+          onClick={() => setEmergOpen(true)}
+          className="h-auto justify-start p-4 text-left"
+          style={{ background: "var(--gradient-brand)" }}
+        >
+          <LifeBuoy className="size-5 mr-3 shrink-0" />
+          <span className="font-semibold">{em.title}</span>
+        </Button>
+        <Button
+          asChild
+          variant="outline"
+          className="h-auto justify-start p-4 text-left"
+        >
+          <a href={DEEP_DIVE_URL} target="_blank" rel="noopener noreferrer">
+            <BookOpen className="size-5 mr-3 shrink-0" />
+            <span className="font-semibold flex-1">
+              {i18n.language === "it" ? "Spiegazioni approfondite"
+                : i18n.language === "fr" ? "Explications approfondies"
+                : i18n.language === "ar" ? "شروحات معمّقة"
+                : "In-depth explanations"}
+            </span>
+            <ExternalLink className="size-4 opacity-60" />
+          </a>
+        </Button>
+      </div>
+
+      <Dialog open={emergOpen} onOpenChange={setEmergOpen}>
+        <DialogContent className="max-w-lg max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <LifeBuoy className="size-5 text-primary" />
+              {em.title}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            {em.sections.map((s) => (
+              <div key={s.h}>
+                <h4 className="font-semibold text-sm">{s.h}</h4>
+                <p className="text-sm text-muted-foreground">{s.b}</p>
+              </div>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {(tips ?? []).map((tip, i) => (

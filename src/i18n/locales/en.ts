@@ -89,6 +89,10 @@ const en: Translation = {
     noteOptional: "Note (optional)",
     deleteConfirm: "Delete this transaction?",
     tooltip: "Record every income and expense here. The system computes everything for you.",
+    exportCsv: "Export CSV",
+    newCategory: "New category",
+    categoryName: "Category name",
+    customCategories: "Custom categories",
   },
   forecast: {
     title: "Monthly forecast",
@@ -111,6 +115,10 @@ const en: Translation = {
     reminderLabel: "Reminder (optional)",
     upcoming: "Upcoming reminders",
     tooltip: "Track bills, payments and important deadlines.",
+    enableNotifications: "Enable notifications",
+    notificationsOn: "Notifications enabled",
+    notificationsBlocked: "Notifications blocked by the browser",
+    notifTitle: "Kakebo reminder",
   },
   tips: {
     title: "Useful tips",
@@ -124,6 +132,10 @@ const en: Translation = {
     goalSection: "Yearly goal",
     monthlyChallenge: "Monthly challenge amount (€)",
     monthlyChallengeHint: "How much you want to save every month",
+    diarySection: "My diary",
+    diaryHint: "Write your current situation and your intentions. You can fill this in only once.",
+    diarySaved: "Diary saved — read-only",
+    diaryPlaceholder: "How are you today? What are your goals and what do you want to change?",
   },
   operator: {
     title: "Assigned beneficiaries",
