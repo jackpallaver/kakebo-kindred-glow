@@ -56,3 +56,14 @@ export const CATEGORY_COLORS: Record<Category, string> = {
   altro: "oklch(0.55 0.02 220)",
   stipendio: "oklch(0.60 0.15 145)",
 };
+
+export function isBuiltinCategory(name: string): name is Category {
+  return (CATEGORIES as readonly string[]).includes(name);
+}
+
+export function categoryLabel(
+  t: (key: string) => string,
+  name: string,
+): string {
+  return isBuiltinCategory(name) ? t(`categories.${name}`) : name;
+}
