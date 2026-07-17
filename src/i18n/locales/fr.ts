@@ -89,6 +89,10 @@ const fr: Translation = {
     noteOptional: "Note (facultatif)",
     deleteConfirm: "Supprimer ce mouvement?",
     tooltip: "Enregistrez ici chaque revenu et dépense. Le système calcule tout.",
+    exportCsv: "Exporter CSV",
+    newCategory: "Nouvelle catégorie",
+    categoryName: "Nom de la catégorie",
+    customCategories: "Catégories personnalisées",
   },
   forecast: {
     title: "Prévisions mensuelles",
@@ -111,6 +115,10 @@ const fr: Translation = {
     reminderLabel: "Rappel (facultatif)",
     upcoming: "Prochaines échéances",
     tooltip: "Suivez factures, paiements et échéances importantes.",
+    enableNotifications: "Activer les notifications",
+    notificationsOn: "Notifications activées",
+    notificationsBlocked: "Notifications bloquées par le navigateur",
+    notifTitle: "Rappel Kakebo",
   },
   tips: {
     title: "Conseils utiles",
@@ -124,6 +132,10 @@ const fr: Translation = {
     goalSection: "Objectif annuel",
     monthlyChallenge: "Montant du défi mensuel (€)",
     monthlyChallengeHint: "Combien vous voulez épargner chaque mois",
+    diarySection: "Mon journal",
+    diaryHint: "Écrivez votre situation actuelle et vos intentions. Vous ne pouvez le remplir qu'une seule fois.",
+    diarySaved: "Journal enregistré — lecture seule",
+    diaryPlaceholder: "Comment allez-vous aujourd'hui? Quels sont vos objectifs et ce que vous voulez changer?",
   },
   operator: {
     title: "Bénéficiaires assignés",
