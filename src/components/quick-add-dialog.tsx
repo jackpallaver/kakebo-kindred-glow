@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { CATEGORIES, categoryLabel } from "@/lib/categories";
+import { CATEGORIES } from "@/lib/categories";
 import {
   Dialog,
   DialogContent,
