@@ -49,12 +49,17 @@ function SettingsPage() {
   const [desc, setDesc] = useState("");
   const [amount, setAmount] = useState("");
   const [challenge, setChallenge] = useState("");
+  const [diary, setDiary] = useState("");
+  const [diaryLocked, setDiaryLocked] = useState(false);
 
   useEffect(() => {
     if (profile) {
       setName(profile.full_name ?? "");
-      const p = profile as { monthly_challenge_amount?: number };
+      const p = profile as { monthly_challenge_amount?: number; diary?: string | null };
       setChallenge(String(p.monthly_challenge_amount ?? 50));
+      const d = p.diary ?? "";
+      setDiary(d);
+      setDiaryLocked(d.trim().length > 0);
     }
   }, [profile]);
 
@@ -64,6 +69,20 @@ function SettingsPage() {
       .from("profiles")
       .update({ full_name: name, monthly_challenge_amount: c > 0 ? c : 0 } as never)
       .eq("id", user.id);
+    toast.success("✓");
+    qc.invalidateQueries();
+  }
+
+  async function saveDiary() {
+    if (diaryLocked) return;
+    const text = diary.trim();
+    if (!text) return;
+    const { error } = await supabase
+      .from("profiles")
+      .update({ diary: text } as never)
+      .eq("id", user.id);
+    if (error) return toast.error(error.message);
+    setDiaryLocked(true);
     toast.success("✓");
     qc.invalidateQueries();
   }
@@ -159,6 +178,25 @@ function SettingsPage() {
             {t("common.add")}
           </Button>
         </div>
+      </Card>
+
+      <Card className="p-6 space-y-4">
+        <h2 className="font-semibold">{t("settings.diarySection")}</h2>
+        <p className="text-xs text-muted-foreground">
+          {diaryLocked ? t("settings.diarySaved") : t("settings.diaryHint")}
+        </p>
+        <Textarea
+          value={diary}
+          onChange={(e) => setDiary(e.target.value)}
+          rows={6}
+          placeholder={t("settings.diaryPlaceholder")}
+          disabled={diaryLocked}
+        />
+        {!diaryLocked && (
+          <Button onClick={saveDiary} disabled={!diary.trim()} variant="outline">
+            {t("common.save")}
+          </Button>
+        )}
       </Card>
     </div>
   );
