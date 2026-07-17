@@ -82,14 +82,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Kakebo — Cooperativa Progetto 92" },
+      { title: "Kakeboz" },
       { name: "description", content: "Il metodo giapponese Kakebo in versione digitale: consapevolezza finanziaria, risparmio e obiettivi." },
       { name: "author", content: "Cooperativa Progetto 92" },
-      { property: "og:title", content: "Kakebo — Cooperativa Progetto 92" },
+      { property: "og:title", content: "Kakeboz" },
       { property: "og:description", content: "Il metodo giapponese Kakebo in versione digitale: consapevolezza finanziaria, risparmio e obiettivi." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "Kakeboz" },
+      { name: "twitter:description", content: "Il metodo giapponese Kakebo in versione digitale: consapevolezza finanziaria, risparmio e obiettivi." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/deb57eb3-d222-4f17-bf24-36528b06aef0/id-preview-97daaab3--749b0915-6f80-4da1-958a-5ba0ce40e9b7.lovable.app-1784276397198.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/deb57eb3-d222-4f17-bf24-36528b06aef0/id-preview-97daaab3--749b0915-6f80-4da1-958a-5ba0ce40e9b7.lovable.app-1784276397198.png" },
     ],
     links: [
       {
