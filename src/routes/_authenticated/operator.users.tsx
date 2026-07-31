@@ -5,6 +5,7 @@ import { Users, ChevronRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { InviteManager } from "@/components/invite-manager";
 
 export const Route = createFileRoute("/_authenticated/operator/users")({
   component: OperatorUsersPage,
@@ -62,6 +63,8 @@ function OperatorUsersPage() {
           ))}
         </Card>
       )}
+
+      <InviteManager operatorId={user.id} />
     </div>
   );
 }
