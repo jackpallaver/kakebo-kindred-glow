@@ -42,13 +42,21 @@ function AuthPage() {
         },
       });
       setLoading(false);
-      if (error) return toast.error(error.message);
+      if (error) {
+        return toast.error(
+          /not_invited/i.test(error.message) ? t("auth.notInvited") : error.message,
+        );
+      }
       toast.success(t("auth.checkEmail"));
       navigate({ to: "/dashboard" });
     } else {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       setLoading(false);
-      if (error) return toast.error(error.message);
+    if (error) {
+      return toast.error(
+        /not_invited/i.test(error.message) ? t("auth.notInvited") : error.message,
+      );
+    }
       navigate({ to: "/dashboard" });
     }
   }
