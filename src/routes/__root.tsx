@@ -94,13 +94,19 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:description", content: "Il metodo giapponese Kakebo in versione digitale: consapevolezza finanziaria, risparmio e obiettivi." },
       { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/deb57eb3-d222-4f17-bf24-36528b06aef0/id-preview-97daaab3--749b0915-6f80-4da1-958a-5ba0ce40e9b7.lovable.app-1784276397198.png" },
       { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/deb57eb3-d222-4f17-bf24-36528b06aef0/id-preview-97daaab3--749b0915-6f80-4da1-958a-5ba0ce40e9b7.lovable.app-1784276397198.png" },
+      { name: "theme-color", content: "#007499" },
+      { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "default" },
+      { name: "apple-mobile-web-app-title", content: "Kakeboz" },
     ],
     links: [
       {
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", href: "/favicon.png", type: "image/png" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
+      { rel: "manifest", href: "/manifest.webmanifest" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
