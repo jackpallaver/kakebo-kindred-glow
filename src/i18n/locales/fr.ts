@@ -39,6 +39,7 @@ const fr: Translation = {
     switchToSignUp: "Pas de compte? Inscrivez-vous",
     switchToSignIn: "Déjà un compte? Connectez-vous",
     checkEmail: "Vérifiez votre email pour confirmer votre compte",
+    notInvited: "Cet email n'a pas d'invitation. Demandez à votre opérateur de vous inviter.",
   },
   onboarding: {
     title: "Définissez votre objectif annuel",

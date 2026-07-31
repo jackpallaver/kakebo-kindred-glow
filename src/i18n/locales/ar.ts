@@ -39,6 +39,7 @@ const ar: Translation = {
     switchToSignUp: "ليس لديك حساب؟ سجّل الآن",
     switchToSignIn: "لديك حساب؟ سجّل الدخول",
     checkEmail: "تحقق من بريدك لتأكيد حسابك",
+    notInvited: "لا توجد دعوة لهذا البريد. اطلب من المشغّل دعوتك.",
   },
   onboarding: {
     title: "حدد هدفك السنوي",

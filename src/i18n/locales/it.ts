@@ -37,6 +37,7 @@ const it = {
     switchToSignUp: "Non hai un account? Registrati",
     switchToSignIn: "Hai già un account? Accedi",
     checkEmail: "Controlla la tua email per confermare l'account",
+    notInvited: "Questa email non ha un invito. Chiedi all'operatore di invitarti.",
   },
   onboarding: {
     title: "Definisci il tuo obiettivo annuale",
