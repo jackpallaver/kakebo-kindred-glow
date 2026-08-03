@@ -122,7 +122,7 @@ function CalendarPage() {
 
   return (
     <div className="p-4 md:p-6 max-w-5xl mx-auto space-y-6">
-      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sm:flex sm:flex-wrap sm:justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
         <h1 className="min-w-0 text-xl sm:text-2xl font-display font-bold flex items-center gap-2">
           {t("calendar.title")}
           <InfoTooltip text={t("calendar.tooltip")} />
