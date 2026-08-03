@@ -32,15 +32,17 @@ export async function sendReminderEmail(input: ReminderEmailInput): Promise<Remi
   }
 
   try {
-    const { sendTemplateEmail } = (await import(
-      /* @vite-ignore */ "@/lib/email-templates/send-email"
-    )) as {
+    // Resolved at runtime only: the module exists once app-email templates
+    // have been scaffolded against a verified sender domain.
+    const modulePath = "@/lib/email-templates/send-email";
+    const mod = (await import(/* @vite-ignore */ modulePath)) as {
       sendTemplateEmail: (
         name: string,
         to: string,
         opts: { templateData?: Record<string, unknown>; idempotencyKey?: string },
       ) => Promise<{ sent: boolean; reason?: string }>;
     };
+    const { sendTemplateEmail } = mod;
 
     const result = await sendTemplateEmail("deadline-reminder", input.to, {
       templateData: {
