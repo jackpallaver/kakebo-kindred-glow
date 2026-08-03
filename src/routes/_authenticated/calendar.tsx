@@ -122,12 +122,12 @@ function CalendarPage() {
 
   return (
     <div className="p-4 md:p-6 max-w-5xl mx-auto space-y-6">
-      <div className="flex items-center justify-between flex-wrap gap-2">
-        <h1 className="text-2xl font-display font-bold flex items-center gap-2">
+      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sm:flex sm:flex-wrap sm:justify-between">
+        <h1 className="min-w-0 text-xl sm:text-2xl font-display font-bold flex items-center gap-2">
           {t("calendar.title")}
           <InfoTooltip text={t("calendar.tooltip")} />
         </h1>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2 justify-end">
           <Button
             variant="outline"
             size="sm"
@@ -175,8 +175,8 @@ function CalendarPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card className="p-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card className="p-2 sm:p-4 overflow-hidden">
           <ShadCalendar
             mode="single"
             selected={selected}
@@ -187,11 +187,12 @@ function CalendarPage() {
               hasEvent:
                 "[&>button]:rounded-full [&>button]:border-2 [&>button]:border-[#9a3412] [&>button]:text-[#9a3412] [&>button]:font-bold",
             }}
-            className="pointer-events-auto"
+            classNames={{ root: "w-full", month: "flex w-full flex-col gap-4" }}
+            className="pointer-events-auto w-full [--cell-size:clamp(2rem,calc((100%-1rem)/7),3rem)] p-1 sm:p-3"
           />
         </Card>
 
-        <Card className="p-6 space-y-3">
+        <Card className="p-4 sm:p-6 space-y-3">
           <h3 className="font-semibold">{t("calendar.upcoming")}</h3>
           {!events?.length ? (
             <p className="text-sm text-muted-foreground">{t("calendar.empty")}</p>
@@ -199,15 +200,15 @@ function CalendarPage() {
             <div className="space-y-2">
               {events.map((e) => (
                 <div key={e.id} className="flex items-center gap-3 p-3 rounded-md bg-muted/50">
-                  <CalendarClock className="size-4 text-primary" />
-                  <div className="flex-1">
-                    <div className="font-medium text-sm">{e.title}</div>
-                    <div className="text-xs text-muted-foreground">
+                  <CalendarClock className="size-4 shrink-0 text-primary" />
+                  <div className="flex-1 min-w-0">
+                    <div className="font-medium text-sm truncate">{e.title}</div>
+                    <div className="text-xs text-muted-foreground truncate">
                       {new Date(e.date).toLocaleDateString(i18n.language)}
                       {e.note ? ` · ${e.note}` : ""}
                     </div>
                   </div>
-                  <Button variant="ghost" size="icon" onClick={() => del(e.id)} aria-label="Delete">
+                  <Button variant="ghost" size="icon" className="shrink-0" onClick={() => del(e.id)} aria-label="Delete">
                     <Trash2 className="size-4" />
                   </Button>
                 </div>
