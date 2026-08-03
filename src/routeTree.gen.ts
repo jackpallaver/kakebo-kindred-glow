@@ -20,6 +20,7 @@ import { Route as AuthenticatedForecastRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedCalendarRouteImport } from './routes/_authenticated/calendar'
 import { Route as AuthenticatedOperatorUsersRouteImport } from './routes/_authenticated/operator.users'
+import { Route as ApiPublicHooksSendRemindersRouteImport } from './routes/api/public/hooks/send-reminders'
 import { Route as AuthenticatedOperatorUsersUserIdRouteImport } from './routes/_authenticated/operator.users.$userId'
 
 const AuthRoute = AuthRouteImport.update({
@@ -78,6 +79,12 @@ const AuthenticatedOperatorUsersRoute =
     path: '/operator/users',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const ApiPublicHooksSendRemindersRoute =
+  ApiPublicHooksSendRemindersRouteImport.update({
+    id: '/api/public/hooks/send-reminders',
+    path: '/api/public/hooks/send-reminders',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AuthenticatedOperatorUsersUserIdRoute =
   AuthenticatedOperatorUsersUserIdRouteImport.update({
     id: '/$userId',
@@ -97,6 +104,7 @@ export interface FileRoutesByFullPath {
   '/transactions': typeof AuthenticatedTransactionsRoute
   '/operator/users': typeof AuthenticatedOperatorUsersRouteWithChildren
   '/operator/users/$userId': typeof AuthenticatedOperatorUsersUserIdRoute
+  '/api/public/hooks/send-reminders': typeof ApiPublicHooksSendRemindersRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -110,6 +118,7 @@ export interface FileRoutesByTo {
   '/transactions': typeof AuthenticatedTransactionsRoute
   '/operator/users': typeof AuthenticatedOperatorUsersRouteWithChildren
   '/operator/users/$userId': typeof AuthenticatedOperatorUsersUserIdRoute
+  '/api/public/hooks/send-reminders': typeof ApiPublicHooksSendRemindersRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -125,6 +134,7 @@ export interface FileRoutesById {
   '/_authenticated/transactions': typeof AuthenticatedTransactionsRoute
   '/_authenticated/operator/users': typeof AuthenticatedOperatorUsersRouteWithChildren
   '/_authenticated/operator/users/$userId': typeof AuthenticatedOperatorUsersUserIdRoute
+  '/api/public/hooks/send-reminders': typeof ApiPublicHooksSendRemindersRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -140,6 +150,7 @@ export interface FileRouteTypes {
     | '/transactions'
     | '/operator/users'
     | '/operator/users/$userId'
+    | '/api/public/hooks/send-reminders'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -153,6 +164,7 @@ export interface FileRouteTypes {
     | '/transactions'
     | '/operator/users'
     | '/operator/users/$userId'
+    | '/api/public/hooks/send-reminders'
   id:
     | '__root__'
     | '/'
@@ -167,12 +179,14 @@ export interface FileRouteTypes {
     | '/_authenticated/transactions'
     | '/_authenticated/operator/users'
     | '/_authenticated/operator/users/$userId'
+    | '/api/public/hooks/send-reminders'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  ApiPublicHooksSendRemindersRoute: typeof ApiPublicHooksSendRemindersRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -254,6 +268,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedOperatorUsersRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/hooks/send-reminders': {
+      id: '/api/public/hooks/send-reminders'
+      path: '/api/public/hooks/send-reminders'
+      fullPath: '/api/public/hooks/send-reminders'
+      preLoaderRoute: typeof ApiPublicHooksSendRemindersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/operator/users/$userId': {
       id: '/_authenticated/operator/users/$userId'
       path: '/$userId'
@@ -308,6 +329,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  ApiPublicHooksSendRemindersRoute: ApiPublicHooksSendRemindersRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
