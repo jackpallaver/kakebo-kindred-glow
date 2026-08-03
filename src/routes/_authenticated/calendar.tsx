@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Trash2, CalendarClock, Plus, Bell } from "lucide-react";
 import { it as itLocale, enUS, fr as frLocale, ar as arLocale } from "date-fns/locale";
 import { toast } from "sonner";
@@ -16,6 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { disablePush, enablePush, getExistingSubscription, isPushSupported } from "@/lib/push";
 
 export const Route = createFileRoute("/_authenticated/calendar")({
   component: CalendarPage,
@@ -31,9 +32,12 @@ function CalendarPage() {
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [reminderAt, setReminderAt] = useState("");
   const [note, setNote] = useState("");
-  const [notifPerm, setNotifPerm] = useState<NotificationPermission>(
-    typeof Notification !== "undefined" ? Notification.permission : "denied",
-  );
+  const [pushOn, setPushOn] = useState(false);
+  const [pushBusy, setPushBusy] = useState(false);
+
+  useEffect(() => {
+    getExistingSubscription().then((s) => setPushOn(Boolean(s)));
+  }, []);
 
   const locale =
     i18n.language === "it" ? itLocale
@@ -74,49 +78,32 @@ function CalendarPage() {
     qc.invalidateQueries({ queryKey: ["events"] });
   }
 
-  async function enableNotifications() {
-    if (typeof Notification === "undefined") {
-      toast.error(t("calendar.notificationsBlocked"));
-      return;
-    }
-    const p = await Notification.requestPermission();
-    setNotifPerm(p);
-    if (p === "granted") toast.success(t("calendar.notificationsOn"));
-    else toast.error(t("calendar.notificationsBlocked"));
-  }
-
-  // Schedule in-page notifications for upcoming reminders while page is open
-  const timers = useRef<number[]>([]);
-  useEffect(() => {
-    timers.current.forEach((id) => clearTimeout(id));
-    timers.current = [];
-    if (notifPerm !== "granted" || !events) return;
-    const now = Date.now();
-    const shownKey = "kakebo_notif_shown";
-    const shown = new Set<string>(JSON.parse(sessionStorage.getItem(shownKey) ?? "[]"));
-    events.forEach((e) => {
-      const when = e.reminder_at ? new Date(e.reminder_at).getTime() : new Date(e.date + "T09:00").getTime();
-      const delay = when - now;
-      if (shown.has(e.id)) return;
-      if (delay > 0 && delay < 24 * 60 * 60 * 1000) {
-        const id = window.setTimeout(() => {
-          try {
-            new Notification(t("calendar.notifTitle"), { body: e.title });
-          } catch { /* ignore */ }
-          shown.add(e.id);
-          sessionStorage.setItem(shownKey, JSON.stringify([...shown]));
-        }, delay);
-        timers.current.push(id);
-      } else if (delay <= 0 && delay > -6 * 60 * 60 * 1000) {
-        try {
-          new Notification(t("calendar.notifTitle"), { body: e.title });
-        } catch { /* ignore */ }
-        shown.add(e.id);
-        sessionStorage.setItem(shownKey, JSON.stringify([...shown]));
+  async function togglePush() {
+    if (!isPushSupported()) return toast.error(t("notifications.unsupported"));
+    setPushBusy(true);
+    try {
+      if (pushOn) {
+        await disablePush(user.id);
+        await supabase
+          .from("notification_settings")
+          .upsert({ user_id: user.id, push_enabled: false }, { onConflict: "user_id" });
+        setPushOn(false);
+        toast.success(t("notifications.disabled"));
+      } else {
+        await enablePush(user.id, i18n.language);
+        await supabase
+          .from("notification_settings")
+          .upsert({ user_id: user.id, push_enabled: true }, { onConflict: "user_id" });
+        setPushOn(true);
+        toast.success(t("notifications.enabled"));
       }
-    });
-    return () => { timers.current.forEach((id) => clearTimeout(id)); };
-  }, [events, notifPerm, t]);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "error";
+      toast.error(message === "denied" ? t("notifications.denied") : t("notifications.unsupported"));
+    } finally {
+      setPushBusy(false);
+    }
+  }
 
   const daysWithEvents = (events ?? []).map((e) => new Date(e.date));
 
@@ -128,14 +115,9 @@ function CalendarPage() {
           <InfoTooltip text={t("calendar.tooltip")} />
         </h1>
         <div className="flex flex-wrap gap-2 justify-end">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={enableNotifications}
-            disabled={notifPerm === "granted"}
-          >
+          <Button variant="outline" size="sm" onClick={togglePush} disabled={pushBusy}>
             <Bell className="size-4 mr-2" />
-            {notifPerm === "granted" ? t("calendar.notificationsOn") : t("calendar.enableNotifications")}
+            {pushOn ? t("notifications.disabled") : t("calendar.enableNotifications")}
           </Button>
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
