@@ -167,6 +167,68 @@ export type Database = {
         }
         Relationships: []
       }
+      notification_deliveries: {
+        Row: {
+          channel: string
+          event_id: string
+          id: string
+          sent_at: string
+          user_id: string
+        }
+        Insert: {
+          channel: string
+          event_id: string
+          id?: string
+          sent_at?: string
+          user_id: string
+        }
+        Update: {
+          channel?: string
+          event_id?: string
+          id?: string
+          sent_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_deliveries_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "calendar_events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notification_settings: {
+        Row: {
+          created_at: string
+          email_address: string | null
+          email_enabled: boolean
+          lead_minutes: number
+          push_enabled: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email_address?: string | null
+          email_enabled?: boolean
+          lead_minutes?: number
+          push_enabled?: boolean
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email_address?: string | null
+          email_enabled?: boolean
+          lead_minutes?: number
+          push_enabled?: boolean
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       operator_assignments: {
         Row: {
           created_at: string
@@ -215,6 +277,36 @@ export type Database = {
           language?: Database["public"]["Enums"]["app_language"]
           monthly_challenge_amount?: number
           updated_at?: string
+        }
+        Relationships: []
+      }
+      push_subscriptions: {
+        Row: {
+          auth: string
+          created_at: string
+          endpoint: string
+          id: string
+          language: string
+          p256dh: string
+          user_id: string
+        }
+        Insert: {
+          auth: string
+          created_at?: string
+          endpoint: string
+          id?: string
+          language?: string
+          p256dh: string
+          user_id: string
+        }
+        Update: {
+          auth?: string
+          created_at?: string
+          endpoint?: string
+          id?: string
+          language?: string
+          p256dh?: string
+          user_id?: string
         }
         Relationships: []
       }
