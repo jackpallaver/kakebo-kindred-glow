@@ -62,6 +62,26 @@ function TransactionsPage() {
     URL.revokeObjectURL(url);
   }
 
+  const groups = (() => {
+    const map = new Map<string, { key: string; label: string; items: typeof transactions; net: number }>();
+    for (const tx of transactions ?? []) {
+      const key = tx.date.slice(0, 7);
+      if (!map.has(key)) {
+        const d = new Date(Number(key.slice(0, 4)), Number(key.slice(5, 7)) - 1, 1);
+        map.set(key, {
+          key,
+          label: d.toLocaleDateString(i18n.language, { month: "long", year: "numeric" }),
+          items: [],
+          net: 0,
+        });
+      }
+      const g = map.get(key)!;
+      g.items!.push(tx);
+      g.net += (tx.type === "income" ? 1 : -1) * Number(tx.amount);
+    }
+    return [...map.values()];
+  })();
+
   return (
     <div className="p-4 md:p-6 max-w-4xl mx-auto space-y-4">
       <div className="flex items-center justify-between gap-2 flex-wrap">
@@ -83,8 +103,13 @@ function TransactionsPage() {
       {!transactions?.length ? (
         <Card className="p-12 text-center text-muted-foreground">{t("transactions.empty")}</Card>
       ) : (
-        <Card className="divide-y">
-          {transactions.map((tx) => {
+        <div className="space-y-4">
+          {groups.map((group) => (
+            <Card key={group.key} className="divide-y overflow-hidden">
+              <div className="px-4 py-2 bg-muted/60">
+                <span className="text-sm font-semibold capitalize">{group.label}</span>
+              </div>
+              {group.items!.map((tx) => {
             const Icon = CATEGORY_ICONS[tx.category as Category] ?? CATEGORY_ICONS.altro;
             return (
               <div key={tx.id} className="p-4 flex items-center gap-4">
@@ -110,8 +135,20 @@ function TransactionsPage() {
                 </Button>
               </div>
             );
-          })}
-        </Card>
+              })}
+              <div className="px-4 py-3 flex items-center justify-between bg-muted/40">
+                <span className="text-sm font-medium capitalize">
+                  {t("transactions.monthTotal", { month: group.label })}
+                </span>
+                <span
+                  className={`font-display font-bold ${group.net >= 0 ? "text-success" : "text-destructive"}`}
+                >
+                  {group.net >= 0 ? "+" : "−"} € {Math.abs(group.net).toFixed(2)}
+                </span>
+              </div>
+            </Card>
+          ))}
+        </div>
       )}
     </div>
   );
