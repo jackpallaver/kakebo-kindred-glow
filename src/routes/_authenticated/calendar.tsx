@@ -117,7 +117,7 @@ function CalendarPage() {
         <div className="flex flex-wrap gap-2 justify-end">
           <Button variant="outline" size="sm" onClick={togglePush} disabled={pushBusy}>
             <Bell className="size-4 mr-2" />
-            {pushOn ? t("notifications.disabled") : t("calendar.enableNotifications")}
+            {pushOn ? t("notifications.disablePush") : t("calendar.enableNotifications")}
           </Button>
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
@@ -169,7 +169,12 @@ function CalendarPage() {
               hasEvent:
                 "[&>button]:rounded-full [&>button]:border-2 [&>button]:border-[#9a3412] [&>button]:text-[#9a3412] [&>button]:font-bold",
             }}
-            classNames={{ root: "w-full", month: "flex w-full flex-col gap-4" }}
+            classNames={{
+              root: "w-full",
+              month: "flex w-full flex-col gap-4",
+              day: "group/day relative aspect-square h-full w-full select-none p-0 text-center rounded-full [&>button]:rounded-full",
+              today: "rounded-full [&>button]:rounded-full",
+            }}
             className="pointer-events-auto w-full [--cell-size:clamp(2rem,calc((100%-1rem)/7),3rem)] p-1 sm:p-3"
           />
         </Card>

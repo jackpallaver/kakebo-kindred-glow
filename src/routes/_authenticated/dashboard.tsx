@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
-import { TrendingUp, TrendingDown, PiggyBank, Target, LineChart as LineChartIcon, CalendarClock } from "lucide-react";
+import { TrendingUp, TrendingDown, PiggyBank, Target, LineChart as LineChartIcon, CalendarClock, ChevronLeft, ChevronRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { fetchMonthlyStats, fetchYearlySavings } from "@/lib/kakebo";
 import { CATEGORY_COLORS, type Category } from "@/lib/categories";
@@ -49,6 +50,17 @@ function Dashboard() {
     queryFn: () => fetchMonthlyStats(user.id, year, month),
   });
 
+  const [catOffset, setCatOffset] = useState(0);
+  const catDate = new Date(year, month - 1 + catOffset, 1);
+  const catYear = catDate.getFullYear();
+  const catMonth = catDate.getMonth() + 1;
+  const catLabel = catDate.toLocaleDateString(i18n.language, { month: "long", year: "numeric" });
+
+  const { data: catStats } = useQuery({
+    queryKey: ["stats", user.id, catYear, catMonth],
+    queryFn: () => fetchMonthlyStats(user.id, catYear, catMonth),
+  });
+
   const { data: yearly } = useQuery({
     queryKey: ["yearly", user.id, year],
     queryFn: () => fetchYearlySavings(user.id, year),
@@ -86,7 +98,7 @@ function Dashboard() {
   const yearSavings = (yearly ?? []).reduce((a, b) => a + Math.max(b.savings, 0), 0);
   const goalProgress = goalTotal > 0 ? Math.min(100, (yearSavings / goalTotal) * 100) : 0;
 
-  const pieData = Object.entries(stats?.byCategory ?? {}).map(([cat, val]) => ({
+  const pieData = Object.entries(catStats?.byCategory ?? {}).map(([cat, val]) => ({
     name: t(`categories.${cat}`),
     value: val,
     color: CATEGORY_COLORS[cat as Category] ?? "gray",
@@ -196,7 +208,24 @@ function Dashboard() {
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Card className="p-6">
-          <h3 className="font-semibold mb-4">{t("dashboard.spendingByCategory")}</h3>
+          <div className="flex items-center justify-between gap-2 mb-4">
+            <h3 className="font-semibold">{t("dashboard.spendingByCategory")}</h3>
+            <div className="flex items-center gap-1">
+              <Button variant="ghost" size="icon" aria-label="prev" onClick={() => setCatOffset((o) => o - 1)}>
+                <ChevronLeft className="size-4" />
+              </Button>
+              <span className="text-sm font-medium capitalize min-w-28 text-center">{catLabel}</span>
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label="next"
+                disabled={catOffset >= 0}
+                onClick={() => setCatOffset((o) => Math.min(0, o + 1))}
+              >
+                <ChevronRight className="size-4" />
+              </Button>
+            </div>
+          </div>
           {pieData.length === 0 ? (
             <p className="text-sm text-muted-foreground text-center py-12">{t("dashboard.noData")}</p>
           ) : (
