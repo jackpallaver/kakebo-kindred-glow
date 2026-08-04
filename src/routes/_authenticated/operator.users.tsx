@@ -6,10 +6,30 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { InviteManager } from "@/components/invite-manager";
+import { fetchMonthlyStats } from "@/lib/kakebo";
 
 export const Route = createFileRoute("/_authenticated/operator/users")({
   component: OperatorUsersPage,
 });
+
+function UserMonthSummary({ userId }: { userId: string }) {
+  const now = new Date();
+  const { data } = useQuery({
+    queryKey: ["op-stats", userId, now.getFullYear(), now.getMonth() + 1],
+    queryFn: () => fetchMonthlyStats(userId, now.getFullYear(), now.getMonth() + 1),
+  });
+  if (!data) return null;
+  const balance = data.income - data.expenses;
+  return (
+    <div className="text-right text-xs">
+      <div className="text-success">+ € {data.income.toFixed(2)}</div>
+      <div className="text-destructive">− € {data.expenses.toFixed(2)}</div>
+      <div className={balance >= 0 ? "text-primary font-semibold" : "text-destructive font-semibold"}>
+        € {balance.toFixed(2)}
+      </div>
+    </div>
+  );
+}
 
 function OperatorUsersPage() {
   const { t } = useTranslation();
@@ -58,6 +78,7 @@ function OperatorUsersPage() {
                 <div className="font-medium">{u.full_name ?? "—"}</div>
                 <div className="text-xs text-muted-foreground uppercase">{u.language}</div>
               </div>
+              <UserMonthSummary userId={u.id} />
               <ChevronRight className="size-4 text-muted-foreground" />
             </Link>
           ))}
