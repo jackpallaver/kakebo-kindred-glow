@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { ArrowLeft, ChevronLeft, ChevronRight, CalendarDays, BookOpen } from "lucide-react";
+import { ArrowLeft, ChevronLeft, ChevronRight, CalendarDays, BookOpen, Download } from "lucide-react";
 import {
   Bar,
   BarChart,
@@ -103,6 +103,25 @@ function OperatorUserDetail() {
   }));
   const balance = (stats?.income ?? 0) - (stats?.expenses ?? 0);
 
+  function exportCsv() {
+    const rows = [...(stats?.transactions ?? [])].sort((a, b) => a.date.localeCompare(b.date));
+    const header = ["data", "tipo", "categoria", "importo", "nota"];
+    const body = rows.map((r) =>
+      [r.date, r.type, r.category, Number(r.amount).toFixed(2), (r.note ?? "").replace(/"/g, '""')]
+        .map((v) => `"${v}"`)
+        .join(","),
+    );
+    const blob = new Blob([[header.join(","), ...body].join("\n")], {
+      type: "text/csv;charset=utf-8;",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `kakebo-${(profile?.full_name ?? "utente").replace(/\s+/g, "-").toLowerCase()}-${year}-${String(month).padStart(2, "0")}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
   return (
     <div className="p-4 md:p-6 max-w-4xl mx-auto space-y-6 pb-24">
       <div className="flex items-center gap-3 flex-wrap">
@@ -111,6 +130,10 @@ function OperatorUserDetail() {
         </Link>
         <h1 className="text-2xl font-display font-bold">{profile?.full_name ?? "—"}</h1>
         <Badge variant="outline">{t("operator.readOnly")}</Badge>
+        <Button variant="outline" size="sm" className="ms-auto" onClick={exportCsv}>
+          <Download className="size-4 me-2" />
+          {t("transactions.exportCsv")}
+        </Button>
       </div>
 
       {/* month navigation */}
