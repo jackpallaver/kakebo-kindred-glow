@@ -19,7 +19,7 @@ import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authentic
 import { Route as AuthenticatedForecastRouteImport } from './routes/_authenticated/forecast'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedCalendarRouteImport } from './routes/_authenticated/calendar'
-import { Route as AuthenticatedOperatorUsersRouteImport } from './routes/_authenticated/operator.users'
+import { Route as AuthenticatedOperatorUsersIndexRouteImport } from './routes/_authenticated/operator.users.index'
 import { Route as ApiPublicHooksSendRemindersRouteImport } from './routes/api/public/hooks/send-reminders'
 import { Route as AuthenticatedOperatorUsersUserIdRouteImport } from './routes/_authenticated/operator.users.$userId'
 
@@ -73,10 +73,10 @@ const AuthenticatedCalendarRoute = AuthenticatedCalendarRouteImport.update({
   path: '/calendar',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedOperatorUsersRoute =
-  AuthenticatedOperatorUsersRouteImport.update({
-    id: '/operator/users',
-    path: '/operator/users',
+const AuthenticatedOperatorUsersIndexRoute =
+  AuthenticatedOperatorUsersIndexRouteImport.update({
+    id: '/operator/users/',
+    path: '/operator/users/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const ApiPublicHooksSendRemindersRoute =
@@ -87,9 +87,9 @@ const ApiPublicHooksSendRemindersRoute =
   } as any)
 const AuthenticatedOperatorUsersUserIdRoute =
   AuthenticatedOperatorUsersUserIdRouteImport.update({
-    id: '/$userId',
-    path: '/$userId',
-    getParentRoute: () => AuthenticatedOperatorUsersRoute,
+    id: '/operator/users/$userId',
+    path: '/operator/users/$userId',
+    getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -102,9 +102,9 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AuthenticatedSettingsRoute
   '/tips': typeof AuthenticatedTipsRoute
   '/transactions': typeof AuthenticatedTransactionsRoute
-  '/operator/users': typeof AuthenticatedOperatorUsersRouteWithChildren
   '/operator/users/$userId': typeof AuthenticatedOperatorUsersUserIdRoute
   '/api/public/hooks/send-reminders': typeof ApiPublicHooksSendRemindersRoute
+  '/operator/users/': typeof AuthenticatedOperatorUsersIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -116,9 +116,9 @@ export interface FileRoutesByTo {
   '/settings': typeof AuthenticatedSettingsRoute
   '/tips': typeof AuthenticatedTipsRoute
   '/transactions': typeof AuthenticatedTransactionsRoute
-  '/operator/users': typeof AuthenticatedOperatorUsersRouteWithChildren
   '/operator/users/$userId': typeof AuthenticatedOperatorUsersUserIdRoute
   '/api/public/hooks/send-reminders': typeof ApiPublicHooksSendRemindersRoute
+  '/operator/users': typeof AuthenticatedOperatorUsersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -132,9 +132,9 @@ export interface FileRoutesById {
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/tips': typeof AuthenticatedTipsRoute
   '/_authenticated/transactions': typeof AuthenticatedTransactionsRoute
-  '/_authenticated/operator/users': typeof AuthenticatedOperatorUsersRouteWithChildren
   '/_authenticated/operator/users/$userId': typeof AuthenticatedOperatorUsersUserIdRoute
   '/api/public/hooks/send-reminders': typeof ApiPublicHooksSendRemindersRoute
+  '/_authenticated/operator/users/': typeof AuthenticatedOperatorUsersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -148,9 +148,9 @@ export interface FileRouteTypes {
     | '/settings'
     | '/tips'
     | '/transactions'
-    | '/operator/users'
     | '/operator/users/$userId'
     | '/api/public/hooks/send-reminders'
+    | '/operator/users/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -162,9 +162,9 @@ export interface FileRouteTypes {
     | '/settings'
     | '/tips'
     | '/transactions'
-    | '/operator/users'
     | '/operator/users/$userId'
     | '/api/public/hooks/send-reminders'
+    | '/operator/users'
   id:
     | '__root__'
     | '/'
@@ -177,9 +177,9 @@ export interface FileRouteTypes {
     | '/_authenticated/settings'
     | '/_authenticated/tips'
     | '/_authenticated/transactions'
-    | '/_authenticated/operator/users'
     | '/_authenticated/operator/users/$userId'
     | '/api/public/hooks/send-reminders'
+    | '/_authenticated/operator/users/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -261,11 +261,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCalendarRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/operator/users': {
-      id: '/_authenticated/operator/users'
+    '/_authenticated/operator/users/': {
+      id: '/_authenticated/operator/users/'
       path: '/operator/users'
-      fullPath: '/operator/users'
-      preLoaderRoute: typeof AuthenticatedOperatorUsersRouteImport
+      fullPath: '/operator/users/'
+      preLoaderRoute: typeof AuthenticatedOperatorUsersIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/api/public/hooks/send-reminders': {
@@ -277,28 +277,13 @@ declare module '@tanstack/react-router' {
     }
     '/_authenticated/operator/users/$userId': {
       id: '/_authenticated/operator/users/$userId'
-      path: '/$userId'
+      path: '/operator/users/$userId'
       fullPath: '/operator/users/$userId'
       preLoaderRoute: typeof AuthenticatedOperatorUsersUserIdRouteImport
-      parentRoute: typeof AuthenticatedOperatorUsersRoute
+      parentRoute: typeof AuthenticatedRouteRoute
     }
   }
 }
-
-interface AuthenticatedOperatorUsersRouteChildren {
-  AuthenticatedOperatorUsersUserIdRoute: typeof AuthenticatedOperatorUsersUserIdRoute
-}
-
-const AuthenticatedOperatorUsersRouteChildren: AuthenticatedOperatorUsersRouteChildren =
-  {
-    AuthenticatedOperatorUsersUserIdRoute:
-      AuthenticatedOperatorUsersUserIdRoute,
-  }
-
-const AuthenticatedOperatorUsersRouteWithChildren =
-  AuthenticatedOperatorUsersRoute._addFileChildren(
-    AuthenticatedOperatorUsersRouteChildren,
-  )
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedCalendarRoute: typeof AuthenticatedCalendarRoute
@@ -308,7 +293,8 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedTipsRoute: typeof AuthenticatedTipsRoute
   AuthenticatedTransactionsRoute: typeof AuthenticatedTransactionsRoute
-  AuthenticatedOperatorUsersRoute: typeof AuthenticatedOperatorUsersRouteWithChildren
+  AuthenticatedOperatorUsersUserIdRoute: typeof AuthenticatedOperatorUsersUserIdRoute
+  AuthenticatedOperatorUsersIndexRoute: typeof AuthenticatedOperatorUsersIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -319,7 +305,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedTipsRoute: AuthenticatedTipsRoute,
   AuthenticatedTransactionsRoute: AuthenticatedTransactionsRoute,
-  AuthenticatedOperatorUsersRoute: AuthenticatedOperatorUsersRouteWithChildren,
+  AuthenticatedOperatorUsersUserIdRoute: AuthenticatedOperatorUsersUserIdRoute,
+  AuthenticatedOperatorUsersIndexRoute: AuthenticatedOperatorUsersIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

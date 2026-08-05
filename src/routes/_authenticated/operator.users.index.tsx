@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { InviteManager } from "@/components/invite-manager";
 import { fetchMonthlyStats } from "@/lib/kakebo";
 
-export const Route = createFileRoute("/_authenticated/operator/users")({
+export const Route = createFileRoute("/_authenticated/operator/users/")({
   component: OperatorUsersPage,
 });
 
