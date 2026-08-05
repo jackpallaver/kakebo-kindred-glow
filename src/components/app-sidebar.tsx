@@ -42,14 +42,16 @@ export function AppSidebar({ isOperator }: { isOperator: boolean }) {
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="border-b">
-        <div className="flex items-center gap-2 px-2 py-3">
+        <div className="flex items-center gap-2 px-2 py-3 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:justify-center">
           <div
-            className="size-8 rounded-lg flex items-center justify-center text-primary-foreground font-bold text-lg"
+            className="size-8 shrink-0 rounded-lg flex items-center justify-center text-primary-foreground font-bold text-lg"
             style={{ background: "var(--gradient-brand)" }}
           >
             家
           </div>
-          <div className="font-display font-semibold text-lg">Kakebo</div>
+          <div className="font-display font-semibold text-lg truncate group-data-[collapsible=icon]:hidden">
+            Kakebo
+          </div>
         </div>
       </SidebarHeader>
       <SidebarContent>
