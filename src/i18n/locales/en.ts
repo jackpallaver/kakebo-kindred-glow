@@ -80,6 +80,9 @@ const en: Translation = {
     viewAll: "View all",
     noForecast: "No forecast set for this month",
     noUpcoming: "No upcoming reminders",
+    forecastVsReal: "Comparison between your forecast and what actually happened",
+    planned: "Planned",
+    actual: "Actual",
   },
   transactions: {
     title: "Your transactions",
@@ -218,6 +221,17 @@ const en: Translation = {
     risparmio: "Savings",
     altro: "Other",
     stipendio: "Salary",
+  },
+  install: {
+    title: "Install the app on your phone",
+    alreadyInstalled: "The app is already installed on this device.",
+    iosIntro: "On iPhone (Safari) you install it from the Share menu:",
+    iosStep1: "Tap the Share button at the bottom",
+    iosStep2: "Scroll and choose \"Add to Home Screen\"",
+    iosStep3: "Confirm with \"Add\"",
+    androidIntro: "Install Kakebo to open it like a real app.",
+    androidFallback: "Open the browser menu and choose \"Install app\" or \"Add to Home screen\".",
+    button: "Install app",
   },
 };
 
