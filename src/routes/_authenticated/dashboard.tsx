@@ -120,6 +120,27 @@ function Dashboard() {
       )
     : 0;
 
+  const compareData = [
+    {
+      key: "income",
+      name: t("common.income"),
+      planned: forecastIncome,
+      actual: stats?.income ?? 0,
+    },
+    {
+      key: "expenses",
+      name: t("common.expense"),
+      planned: forecastExpenses,
+      actual: stats?.expenses ?? 0,
+    },
+    {
+      key: "savings",
+      name: t("dashboard.monthlySavings"),
+      planned: forecastIncome - forecastExpenses,
+      actual: stats?.savings ?? 0,
+    },
+  ];
+
   return (
     <div className="p-4 md:p-6 pb-32 md:pb-6 space-y-6 max-w-7xl mx-auto">
       <div>
