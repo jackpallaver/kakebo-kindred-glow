@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { NotificationSettings } from "@/components/notification-settings";
+import { InstallAppCard } from "@/components/install-app-card";
 
 export const Route = createFileRoute("/_authenticated/settings")({
   component: SettingsPage,
@@ -145,6 +146,8 @@ function SettingsPage() {
       </Card>
 
       <NotificationSettings userId={user.id} userEmail={user.email ?? undefined} />
+
+      <InstallAppCard />
 
       <Card className="p-6 space-y-4">
         <h2 className="font-semibold">{t("settings.goalSection")} {year}</h2>
