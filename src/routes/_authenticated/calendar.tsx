@@ -172,10 +172,15 @@ function CalendarPage() {
             classNames={{
               root: "w-full",
               month: "flex w-full flex-col gap-4",
-              day: "group/day relative aspect-square h-full w-full select-none p-0 text-center rounded-full [&>button]:rounded-full",
+              months: "flex w-full flex-col",
+              table: "w-full border-collapse",
+              week: "flex w-full",
+              weekdays: "flex w-full",
+              weekday: "flex-1 text-center text-muted-foreground text-[0.8rem] font-normal",
+              day: "group/day relative flex-1 h-[var(--cell-size)] min-w-0 select-none p-0 text-center rounded-full [&>button]:size-full [&>button]:rounded-full",
               today: "rounded-full [&>button]:rounded-full",
             }}
-            className="pointer-events-auto w-full [--cell-size:clamp(2rem,calc((100%-1rem)/7),3rem)] p-1 sm:p-3"
+            className="pointer-events-auto w-full max-w-full [--cell-size:2.25rem] sm:[--cell-size:2.75rem] p-1 sm:p-3"
           />
         </Card>
 
