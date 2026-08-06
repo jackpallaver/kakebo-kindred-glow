@@ -274,14 +274,37 @@ function Dashboard() {
             </Button>
           </div>
           {forecastCurrent ? (
-            <div className="space-y-3">
-              <div className="flex items-center justify-between p-3 rounded-md bg-muted/40">
-                <span className="text-sm text-muted-foreground">{t("forecast.expectedIncome")}</span>
-                <span className="font-semibold">€ {forecastIncome.toFixed(2)}</span>
+            <div className="space-y-4">
+              <p className="text-sm text-muted-foreground">{t("dashboard.forecastVsReal")}</p>
+              <div className="h-56">
+                <ResponsiveContainer>
+                  <BarChart data={compareData} margin={{ left: 4, right: 8 }}>
+                    <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
+                    <XAxis dataKey="name" fontSize={12} />
+                    <YAxis fontSize={12} />
+                    <Tooltip formatter={(v: number) => `€ ${Number(v).toFixed(2)}`} />
+                    <Legend wrapperStyle={{ fontSize: 12 }} />
+                    <Bar dataKey="planned" name={t("dashboard.planned")} fill="var(--muted-foreground)" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="actual" name={t("dashboard.actual")} fill="var(--primary)" radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
               </div>
-              <div className="flex items-center justify-between p-3 rounded-md bg-muted/40">
-                <span className="text-sm text-muted-foreground">{t("forecast.totalExpenses")}</span>
-                <span className="font-semibold">€ {forecastExpenses.toFixed(2)}</span>
+              <div className="space-y-2">
+                {compareData.map((row) => {
+                  const diff = row.actual - row.planned;
+                  const good = row.key === "expenses" ? diff <= 0 : diff >= 0;
+                  return (
+                    <div key={row.key} className="flex items-center justify-between gap-2 p-3 rounded-md bg-muted/40 text-sm">
+                      <span className="text-muted-foreground">{row.name}</span>
+                      <span className="shrink-0">
+                        € {row.planned.toFixed(2)} → <strong>€ {row.actual.toFixed(2)}</strong>{" "}
+                        <span className={good ? "text-success" : "text-destructive"}>
+                          ({diff >= 0 ? "+" : "−"} € {Math.abs(diff).toFixed(2)})
+                        </span>
+                      </span>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           ) : (
