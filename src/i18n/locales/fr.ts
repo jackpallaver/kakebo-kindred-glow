@@ -80,6 +80,9 @@ const fr: Translation = {
     viewAll: "Tout voir",
     noForecast: "Aucune prévision pour ce mois",
     noUpcoming: "Aucune échéance à venir",
+    forecastVsReal: "Comparaison entre vos prévisions et la réalité",
+    planned: "Prévu",
+    actual: "Réel",
   },
   transactions: {
     title: "Vos mouvements",
@@ -218,6 +221,17 @@ const fr: Translation = {
     risparmio: "Épargne",
     altro: "Autre",
     stipendio: "Salaire",
+  },
+  install: {
+    title: "Installer l'application sur le téléphone",
+    alreadyInstalled: "L'application est déjà installée sur cet appareil.",
+    iosIntro: "Sur iPhone (Safari), l'installation se fait via le menu Partager :",
+    iosStep1: "Touchez le bouton Partager en bas",
+    iosStep2: "Faites défiler et choisissez « Sur l'écran d'accueil »",
+    iosStep3: "Confirmez avec « Ajouter »",
+    androidIntro: "Installez Kakebo pour l'ouvrir comme une vraie application.",
+    androidFallback: "Ouvrez le menu du navigateur et choisissez « Installer l'application ».",
+    button: "Installer l'application",
   },
 };
 

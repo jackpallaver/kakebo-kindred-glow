@@ -80,6 +80,9 @@ const ar: Translation = {
     viewAll: "عرض الكل",
     noForecast: "لا يوجد توقع لهذا الشهر",
     noUpcoming: "لا مواعيد قادمة",
+    forecastVsReal: "مقارنة بين ما توقعته وما حدث فعلياً",
+    planned: "متوقع",
+    actual: "فعلي",
   },
   transactions: {
     title: "حركاتك",
@@ -218,6 +221,17 @@ const ar: Translation = {
     risparmio: "توفير",
     altro: "أخرى",
     stipendio: "راتب",
+  },
+  install: {
+    title: "ثبّت التطبيق على الهاتف",
+    alreadyInstalled: "التطبيق مثبت بالفعل على هذا الجهاز.",
+    iosIntro: "على iPhone (سفاري) التثبيت يتم من قائمة المشاركة:",
+    iosStep1: "اضغط زر المشاركة في الأسفل",
+    iosStep2: "اختر «إضافة إلى الشاشة الرئيسية»",
+    iosStep3: "أكّد بالضغط على «إضافة»",
+    androidIntro: "ثبّت Kakebo لفتحه كتطبيق حقيقي.",
+    androidFallback: "افتح قائمة المتصفح واختر «تثبيت التطبيق».",
+    button: "تثبيت التطبيق",
   },
 };
 

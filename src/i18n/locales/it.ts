@@ -78,6 +78,9 @@ const it = {
     viewAll: "Vedi tutto",
     noForecast: "Nessuna previsione per questo mese",
     noUpcoming: "Nessuna scadenza in arrivo",
+    forecastVsReal: "Confronto tra quanto avevi previsto e quanto è successo davvero",
+    planned: "Previsto",
+    actual: "Reale",
   },
   transactions: {
     title: "I tuoi movimenti",
@@ -216,6 +219,17 @@ const it = {
     risparmio: "Risparmio",
     altro: "Altro",
     stipendio: "Stipendio",
+  },
+  install: {
+    title: "Installa l'app sul telefono",
+    alreadyInstalled: "L'app è già installata su questo dispositivo.",
+    iosIntro: "Su iPhone (Safari) l'installazione si fa dal menu Condividi:",
+    iosStep1: "Tocca il pulsante Condividi in basso",
+    iosStep2: "Scorri e scegli \"Aggiungi a Home\"",
+    iosStep3: "Conferma con \"Aggiungi\"",
+    androidIntro: "Installa Kakebo per aprirla come una vera app.",
+    androidFallback: "Apri il menu del browser e scegli \"Installa app\" o \"Aggiungi a schermata Home\".",
+    button: "Installa l'app",
   },
 };
 
