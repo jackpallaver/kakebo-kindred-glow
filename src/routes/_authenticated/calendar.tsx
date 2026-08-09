@@ -171,8 +171,12 @@ function CalendarPage() {
             }}
             classNames={{
               root: "w-full",
-              month: "flex w-full flex-col gap-4",
-              months: "flex w-full flex-col",
+              months: "relative flex w-full flex-col",
+              month: "relative flex w-full flex-col gap-4",
+              nav: "absolute inset-x-0 top-0 z-10 flex w-full items-center justify-between gap-1",
+              button_previous: "h-(--cell-size) w-(--cell-size) select-none p-0",
+              button_next: "h-(--cell-size) w-(--cell-size) select-none p-0",
+              month_caption: "flex h-(--cell-size) w-full items-center justify-center px-(--cell-size)",
               table: "w-full border-collapse",
               week: "flex w-full",
               weekdays: "flex w-full",
